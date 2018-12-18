@@ -1,8 +1,6 @@
-var mongoose = require("mongoose");
-//require("./tipousuario");
-var TipoUsuario = mongoose.model("TipoUser");
+const mongoose = require("mongoose");
 
-const usuarioSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
 	nombre: {
 		type: String,
 		require: [true, "Se requiere nombre"]
@@ -30,4 +28,4 @@ const usuarioSchema = new mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model('Usuario', usuarioSchema);
+module.exports = mongoose.model('Usuario', schema);

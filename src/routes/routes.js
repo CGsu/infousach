@@ -1,17 +1,10 @@
 const express = require("express");
 const route = express.Router();
-const fs = require("fs");
-const path = require("path");
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-// Solución provisoria a la creación y uso de modelos.
-const models = path.join(__dirname, "../models");
-// Leemos los modelos a utilizar
-fs.readdirSync(models).forEach((file) => {
-	if (~file.indexOf(".js")) 
-		require(path.join(models, file));
-});
-
+const db = require('./../_helpers/db');
+const TipoUser = db.TipoUser;
+const User = db.User;
 
 // Manejo básico del movimiento a través de las páginas del sitio
 route.get("/", (req, res) => {

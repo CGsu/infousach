@@ -1,0 +1,18 @@
+.profile {
+	width: 220px;
+	height: 280px;
+}
+nav {
+	background-color: #2c3e50;
+}
+
+hr {
+	height: 20px;
+	border-top: 2px solid;
+}
+
+header {
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
+	background: #ccc no-repeat center center fixed; 
+}

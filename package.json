@@ -3,20 +3,31 @@
   "version": "0.0.1",
   "description": "InfoUsach, sitio para revisar eventos de la USACH",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/app.js",
-    "start": "node src/app.js"
+    "dev": "nodemon server/server.js",
+    "start": "npm run build",
+    "build": "webpack -d && copy client\\index.html dist\\index.html && webpack-dev-server --content-base client/ --inline --hot --history-api-fallback"
   },
   "author": "team alpha",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
-    "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mongoose": "^5.4.0",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-router": "^3.2.1"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "nodemon": "^1.18.9",
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.14"
   }
 }

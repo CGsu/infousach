@@ -16,3 +16,7 @@ router.get("/:id", userController.get_user);
 router.patch("/:id", userController.update_user);
 
 router.delete("/:id", userController.delete_user);
+
+router.get("/permiso/:event", userController.permiso_user);
+
+router.get("/permiso/:event/rol/:rol", userController.rol_permiso_user);

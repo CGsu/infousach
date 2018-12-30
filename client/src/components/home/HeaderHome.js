@@ -1,7 +1,6 @@
 import React from "react";
 
-
-export class HeaderHome extends React.Component {
+class HeaderHome extends React.Component {
 	render() {
 		return (
 			<header className="text-success text-center">
@@ -17,3 +16,5 @@ export class HeaderHome extends React.Component {
 		);
 	}
 }
+
+export default HeaderHome;

@@ -1,0 +1,7 @@
+{
+	"env": {
+		"JWT_KEY_ADMIN": "arbol",
+		"JWT_KEY_MOD": "casa",
+		"JWT_KEY_REGISTER": "saludo"
+	}
+}

@@ -5,8 +5,8 @@ const bcrypt = require("bcrypt");
 
 // Obtiene todos los usuarios del sistema ordenados por rol
 exports.user_get_all = (req, res, next) => {
-	User.find({}, null, { sort: {tipoUser: 1} })
-	.populate("tipoUser", {_id: 0, nombre: 1})
+	User.find({}, null, { sort: {rol: 1} })
+	.populate("rol", {nombre: 1})
 	.then(docs => {
 		const respuesta = {
 			count: docs.length,
@@ -16,11 +16,8 @@ exports.user_get_all = (req, res, next) => {
 					nombre: doc.nombre,
 					apeliido: doc.apellido,
 					correo: doc.correo,
-					rol: doc.tipoUser, 
-					request: {
-						type: "GET",
-						url: "http://localhost/tipouser"
-					}
+					rol: doc.rol, 
+					event_asociado: doc.evento_asociado
 				}
 			})
 		}
@@ -31,8 +28,8 @@ exports.user_get_all = (req, res, next) => {
 
 // Obtiene todos los usuarios del sistema según rol
 exports.user_get_rol = (req, res, next) => {
-	User.find({tipoUser: req.params.id}, null, {sort: {nombre: 1} })
-	.populate("tipoUser")
+	User.find({rol: req.params.id}, null, {sort: {nombre: 1} })
+	.populate("rol")
 	.then(docs => {
 		const respuesta = {
 			count: docs.length,
@@ -42,11 +39,8 @@ exports.user_get_rol = (req, res, next) => {
 					nombre: doc.nombre,
 					apeliido: doc.apellido,
 					correo: doc.correo,
-					rol: doc.tipoUser, 
-					request: {
-						type: "GET",
-						url: "http://localhost/tipouser"
-					}
+					rol: doc.rol, 
+					event_asociado: doc.evento_asociado
 				}
 			})
 		}
@@ -57,20 +51,20 @@ exports.user_get_rol = (req, res, next) => {
 
 // Ingresa un nuevo usuario al sistema
 exports.create_user = (req, res, next) => {
-	console.log("Entra a la funcion");
+	console.log(req.body);
 	User.find({correo: req.body.correo})
 	.then(usuario => {
-		console.log("whatsapp");
 		if (usuario.length >= 1) {
 			return res.status(409).json({
 				message: "Ya existe este email"
 			});
 		} else {
-			TipoUser.findById(req.body.id)
+			TipoUser.findById(req.body.rol)
 			.then(tipouser => {
 				if (!tipouser) {
 					return res.status(404).json({ msg: "Tipo de usuario no hallado." });
 				}
+				const permiso = (tipouser.nombre === "admin" ? " " : "no_oficial");
 				bcrypt.hash(req.body.password, 10, (err, hash) => {
 					if (err) {
 						return res.status(500).json({ error: err });
@@ -80,9 +74,10 @@ exports.create_user = (req, res, next) => {
 							_id: mongoose.Types.ObjectId(),
 							nombre: req.body.nombre,
 							apellido: req.body.apellido,
-							correo: req.body.email,
+							correo: req.body.correo,
 							password: hash,
-							rol: tipouser.id
+							rol: tipouser._id,
+							evento_asociado: permiso
 						});
 						user.save()
 						.then(result => {
@@ -90,23 +85,29 @@ exports.create_user = (req, res, next) => {
 								msg: "Usuario creado"
 							});
 						})
-						.catch(err => console.log(err));
+						.catch(err => {
+							console.log(err);
+							next();
+						});
 					}
 				});
 			})
-			.catch(err => console.log(err));
+			.catch(err => {
+				console.log(err);
+				next();
+			});
 		}
 	})
 	.catch(err => {
 		console.log(err);
-		console.log("whatsapp");
+		next();
 	});
 };
 
 // Obtiene un usuario según id
 exports.get_user = (req, res, next) => {
 	User.findById(req.params.id) 
-	.populate("tipoUser")
+	.populate("rol")
 	.then(usuario => {
 		if (!usuario) {
 			return res.status(404).json({msg: "Usuario no encontrado."});
@@ -116,10 +117,14 @@ exports.get_user = (req, res, next) => {
 			nombre: usuario.nombre,
 			apellido: usuario.apellido,
 			correo: usuario.correo,
-			rol: usuario.tipoUser
+			rol: usuario.rol,
+			event_asociado: usuario.evento_asociado,
 		});
 	})
-	.catch(err=>console.log(err));
+	.catch(err=> {
+		console.log(err);
+		next();
+	});
 };
 
 // Elimina un usuario por id
@@ -127,9 +132,15 @@ exports.delete_user = (req, res, next) => {
 	const id = req.params.id;
 	User.remove({_id: id})
 	.then(result => {
+		if (!result) {
+			res.status(404).json({msg: "Usuario no hallado"});
+		}
 		res.status(200).json({ msg: "Usuario eliminado" });
 	})
-	.catch(err => console.log(err));
+	.catch(err => {
+		console.log(err);
+		next();
+	});
 }
 
 // Actualiza un usuario por id
@@ -142,7 +153,61 @@ exports.update_user = (req, res, next) => {
 	User.update({_id: id}, {$set: updateOps })
 	.then(result => {
 		console.log(result);
-		res.status(200).json({ message: "Product Update" });
+		res.status(200).json({ message: "Usuario Update" });
 	})
 	.catch(err => { res.status(500).json({ error: err }) });
+};
+
+// Obtiene todos los usuarios por permiso de evento asociado
+exports.permiso_user = (req, res, next) => {
+	User.find( {evento_asociado: req.params.event })
+	.populate("rol")
+	.then(usuarios => {
+		if (!usuarios) {
+			res.status(404).json({ msg: "Usuarios no encontrados"});
+		} 
+		const respuesta = {
+			count: usuarios.length,
+			users: usuarios.map(user => {
+				return {
+					_id: user._id,
+					nombre: user.nombre,
+					apeliido: user.apellido,
+					correo: user.correo,
+					rol: user.rol, 
+					event_asociado: user.evento_asociado
+				}
+			})
+		};	
+		res.status(200).json(respuesta);
+	})
+	.catch(err => {
+		console.log(err);
+		next();
+	});
+};
+
+// Obtiene los usuarios según rol y permiso asociado a eventos.
+exports.rol_permiso_user = (req, res, next) => {
+	User.find({rol: req.params.rol, evento_asociado: req.params.event})
+	.then(usuarios => {
+		const respuesta = {
+			count: usuarios.length,
+			users: usuarios.map(user => {
+				return {
+					_id: user._id,
+					nombre: user.nombre,
+					apeliido: user.apellido,
+					correo: user.correo,
+					rol: user.rol, 
+					event_asociado: user.evento_asociado
+				}
+			})
+		};
+		res.status(200).json({respuesta});
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: err});
+	});
 };

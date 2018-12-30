@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
 		ref: "tipoUser",
 		required: true
 	},
-	
+	evento_asociado: { type: String, required: true }	
 });
 
 module.exports = mongoose.model("User", userSchema);

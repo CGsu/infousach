@@ -16,7 +16,8 @@ const userSchema = mongoose.Schema({
 		ref: "tipoUser",
 		required: true
 	},
-	evento_asociado: { type: String, required: true }	
+	evento_asociado: { type: String, required: true },
+	acceso: Boolean
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -7,7 +7,7 @@ import "./formlogin.css";
 class Login extends Component {
 	render() {
 		return (
-			<div>
+			<div className="login-body">
 				<Route component={NavLogin}/>
 				<Route component={FormLogin}/>
 			</div>

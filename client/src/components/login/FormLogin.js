@@ -44,8 +44,8 @@ class FormLogin extends React.Component {
 	render() {
 		return (	
 			<div className="modal-dialog text-center">
-				<div className="col-sm-9 main-section">
-					<div className="modal-content">
+				<div className="col-sm-9 main-section login-main-section">
+					<div className="modal-content login-modal-content">
 						<div className="col-12 user-img">
 							<img src="img/logo_user.png" alt="user_logo"/>
 						</div>
@@ -54,21 +54,21 @@ class FormLogin extends React.Component {
 						</div>
 						<div className="col-12 form-input">
 							<form onSubmit={this.handleFormSubmit}>
-								<div className="form-group">
-									<i className="fas fa-at ico-a"></i>
-									<input name="correo" type="email" className="form-control" 
+								<div className="form-group login-form-group">
+									<i className="fas fa-at ico-a login-ico-a"></i>
+									<input name="correo" type="email" className="form-control login-input" 
 										onChange={this.handleChange} placeholder="ingresa email" required/>
 								</div>
-								<div className="form-group">
-									<i className="fas fa-lock ico-a"></i>
-									<input name="password" type="password" className="form-control" 
+								<div className="form-group login-form-group">
+									<i className="fas fa-lock ico-a login-ico-a"></i>
+									<input name="password" type="password" className="form-control login-input" 
 										onChange={this.handleChange} placeholder="ingresa password" required/>
 								</div>
-								<input type="submit" className="btn btn-success"
+								<input type="submit" className="btn btn-success login-btn-success"
 								 	value="Log in" />
 							</form>
 						</div>
-						<div className="col-12 forgot">
+						<div className="col-12 forgot login-forgot">
 							<small>InfoUsach - Desarrollado por Team Alpha</small>
 						</div>
 					</div>

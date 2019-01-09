@@ -8,6 +8,8 @@ require("./libs/database");
 const tipoUserRoutes = require("./api/routes/tipoUser"); 
 const userRoutes = require("./api/routes/user"); 
 const loginRoutes = require("./api/routes/login"); 
+const locationRoutes = require("./api/routes/ubicacion");
+const tipoLocationRoutes = require("./api/routes/tipoUbicacion");
 
 
 app.use(morgan("dev"));
@@ -17,14 +19,15 @@ app.use(bodyparser.json());
 
 // CORS
 app.use((req, res, next) => {
+	console.log(req.params.id);
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header(
 		"Access-Control-Allow-Headers", 
 		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
 	);
 	res.header(
-			"Acces-Control-Allow-Methods",
-			"PUT, POST, PATCH, DELETE, GET"
+			"Access-Control-Allow-Methods",
+			"GET, POST, PUT, DELETE, PATCH, OPTIONS"
 	);
 	if("OPTIONS" == req.method) {
 		return res.status(200).json({});
@@ -36,6 +39,8 @@ app.use((req, res, next) => {
 app.use("/tipouser", tipoUserRoutes);
 app.use("/user", userRoutes);
 app.use("/login", loginRoutes);
+app.use("/location", locationRoutes);
+app.use("/tipolocation", tipoLocationRoutes);
 
 
 app.use((req, res, next) => {

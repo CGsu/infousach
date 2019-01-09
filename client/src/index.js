@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import "leaflet/dist/leaflet.css";
+import "leaflet/dist/leaflet.css";
+import "./index.css";
 import * as serviceWorker from './serviceWorker';
 //
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -9,6 +11,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/login/Login"
 import Admin from "./components/admin/Admin"
 import Register from "./components/register/Register"
+import Moderator from "./components/moderator/Moderator"
+import Free from "./components/free/Free"
 
 ReactDOM.render(
 	<Router >
@@ -18,7 +22,8 @@ ReactDOM.render(
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/admin" component={Admin} />
 				<Route exact path="/register" component={Register} />
-				<Route exact path="/moderador" component={Register} />
+				<Route exact path="/moderador" component={Moderator} />
+				<Route exact path="/free" component={Free} />
 			</Switch>
 		</div>
 	</Router>, 

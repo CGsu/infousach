@@ -1,0 +1,111 @@
+.admin-wrapper {
+    display: flex !important; 
+    align-items: stretch !important;
+}
+#admin-sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+}
+#admin-sidebar.active {
+    margin-left: -250px;
+}
+@media (max-width: 768px) {
+    #admin-sidebar {
+        margin-left: -250px;
+    }
+    #admin-sidebar.active {
+        margin-left: 0;
+    }
+}
+.admin-body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+.admin-p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: inherit;
+    text-align: center;
+    margin-bottom: 0;
+}
+#admin-sidebar {
+    /* don't forget to add all the previously mentioned styles here too */
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+#admin-sidebar .admin-sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+#admin-sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+#admin-sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+.admin-btn-options {
+    color: inherit;
+    background: inherit;
+    border: 1px solid transparent;
+    border-radius: none;
+    text-decoration: none;
+    transition: all 0.3s;
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    outline: none
+}
+.admin-btn-options:hover {
+    color: #7386D5;
+    background: #fff;
+}
+.admin-button:focus {
+    outline: none;
+}
+#admin-dinamic {
+    border: 1px solid black;
+    min-height: 100vh;
+}
+#admin-contenido {
+    margin-top: 30px;
+    align-items: center;
+    justify-content: center; 
+}
+#admin-dinamic p {
+    border: 1px solid black;
+    text-align: center;
+}
+#admin-content {
+    width: 100vw;
+}
+.admin-span {
+    cursor: pointer;
+}
+.admin-small {
+    margin: 0;
+    text-align: center;
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+.perfil:hover p{
+    color: black !important;
+}
+.container-options {
+    height: 100vh;
+    background: #f5f5f5;
+    margin: 0;
+}
+#admin-content-option {
+    padding-left: 0;
+    padding-right: 0;
+}

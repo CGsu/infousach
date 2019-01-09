@@ -1,0 +1,38 @@
+/* Modal styles */
+.lanzador-modal-dialog {
+	max-width: 400px;
+}
+.lanzador-modal-header, .lanzador-modal-body, .lanzador-modal-footer {
+	padding: 20px 30px;
+}
+.lanzador-modal-content {
+	border-radius: 3px;
+}
+.lanzador-modal-footer {
+	background: #ecf0f1;
+	border-radius: 0 0 3px 3px;
+}
+.lanzador-modal-title {
+    display: inline-block;
+}
+.lanzador-form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.lanzador-modal-header {
+	border-radius: 3px;
+}
+.lanzador-modal textarea.form-control {
+	resize: vertical;
+}
+.lanzador-modal .btn {
+	border-radius: 2px;
+	min-width: 100px;
+}	
+.lanzador-modal form label {
+	font-weight: normal;
+}	
+.lanzador-modal {
+	z-index: 10000;
+}

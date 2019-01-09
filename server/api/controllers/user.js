@@ -14,10 +14,11 @@ exports.user_get_all = (req, res, next) => {
 				return {
 					_id: doc._id,
 					nombre: doc.nombre,
-					apeliido: doc.apellido,
+					apellido: doc.apellido,
 					correo: doc.correo,
 					rol: doc.rol, 
-					event_asociado: doc.evento_asociado
+					event_asociado: doc.evento_asociado,
+					acceso: doc.acceso
 				}
 			})
 		}
@@ -37,7 +38,7 @@ exports.user_get_rol = (req, res, next) => {
 				return {
 					_id: doc._id,
 					nombre: doc.nombre,
-					apeliido: doc.apellido,
+					apellido: doc.apellido,
 					correo: doc.correo,
 					rol: doc.rol, 
 					event_asociado: doc.evento_asociado
@@ -72,9 +73,9 @@ exports.create_user = (req, res, next) => {
 					else {
 						const user = new User({
 							_id: mongoose.Types.ObjectId(),
-							nombre: req.body.nombre,
-							apellido: req.body.apellido,
-							correo: req.body.correo,
+							nombre: req.body.nombre.toLoweCase(),
+							apellido: req.body.apellido.toLoweCase(),
+							correo: req.body.correo.toLoweCase(),
 							password: hash,
 							rol: tipouser._id,
 							evento_asociado: permiso
@@ -119,6 +120,7 @@ exports.get_user = (req, res, next) => {
 			correo: usuario.correo,
 			rol: usuario.rol,
 			event_asociado: usuario.evento_asociado,
+			acceso: usuario.acceso
 		});
 	})
 	.catch(err=> {
@@ -145,11 +147,13 @@ exports.delete_user = (req, res, next) => {
 
 // Actualiza un usuario por id
 exports.update_user = (req, res, next) => {
+	console.log("llega aca: ");
 	const id = req.params.id;
 	const updateOps = {};
 	for ( const ops of req.body) {
 		updateOps[ops.propName] = ops.value;
 	}
+	console.log(updateOps);
 	User.update({_id: id}, {$set: updateOps })
 	.then(result => {
 		console.log(result);
@@ -172,7 +176,7 @@ exports.permiso_user = (req, res, next) => {
 				return {
 					_id: user._id,
 					nombre: user.nombre,
-					apeliido: user.apellido,
+					apellido: user.apellido,
 					correo: user.correo,
 					rol: user.rol, 
 					event_asociado: user.evento_asociado
@@ -197,7 +201,7 @@ exports.rol_permiso_user = (req, res, next) => {
 				return {
 					_id: user._id,
 					nombre: user.nombre,
-					apeliido: user.apellido,
+					apellido: user.apellido,
 					correo: user.correo,
 					rol: user.rol, 
 					event_asociado: user.evento_asociado
@@ -211,3 +215,42 @@ exports.rol_permiso_user = (req, res, next) => {
 		res.status(500).json({error: err});
 	});
 };
+
+// Devuelve un filtro sobre usuarios basado posiblemente en rol, permiso evento y patrón de busqueda.
+exports.get_mix_search = (req, res, next) => {
+	let args = new Object();
+	if(req.params["event"] !== "-") args.evento_asociado = req.params["event"];
+	if(req.params["rol"] !== "-") args.rol = req.params["rol"];
+
+	let value = req.params.pattern;
+	if (value !== ".*") {
+		let p = new RegExp(value, "i");
+		args.nombre = {$regex: p};
+		args.apellido = {$regex: p};
+		args.correo = {$regex: p};
+	}
+
+	User.find(args)
+	.populate("rol")
+	.then(usuarios => {
+		const respuesta = {
+			count: usuarios.length,
+			users: usuarios.map(user => {
+				return {
+					_id: user._id,
+					nombre: user.nombre,
+					apellido: user.apellido,
+					correo: user.correo,
+					rol: user.rol, 
+					event_asociado: user.evento_asociado,
+					acceso: user.acceso
+				}
+			})
+		};
+		res.status(200).json({respuesta});
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: err});
+	});
+}

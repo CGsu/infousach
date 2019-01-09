@@ -109,3 +109,16 @@ exports.tipoUser_borrar_tipo = (req, res, next) => {
 		res.status(500).json({error: err});
 	});
 }
+
+// Obtiene el id de un tipo de usuario dado un rol
+exports.tipoUser_get_id_tipo = (req, res, next) => {
+	const nombre = req.params.rol;
+	TipoUser.find({nombre: nombre})
+	.then(result => {
+		res.status(200).json({idrol: result[0]._id});
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: err});
+	});
+}

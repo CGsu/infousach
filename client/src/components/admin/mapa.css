@@ -1,0 +1,78 @@
+.admin-map {
+  width: inherit;
+  height: inherit;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+.admin-map-charge {
+	width: 100%;
+    height: 100%;
+	display: block;
+	float: left;
+}
+.controls-map-admin {
+	display: block;
+  	position: absolute;
+  	top: 20px;
+  	right: 10px;
+  	background: #fff;
+  	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+  	border-radius: 4px;
+  	z-index: 1000 !important;
+  	width: 200px;
+}
+.controls-map-admin .wrapper-map {
+	padding: 30px;
+}
+.control-map-admin-opt, .popup-map-admin-launcher {
+	padding: 0 0.563rem;
+	font-size: 12px;
+	line-height: 2.23rem;
+	letter-spacing: 0;
+	color: #454545;
+	text-shadow: 0 1px #fff;
+	vertical-align: top;
+	background-color: #e5e9e8;
+	box-shadow: inset 0 1px #fff;
+	border: 1px solid #9daca9;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.control-map-admin-opt:hover,  .popup-map-admin-launcher:hover {
+	background-color: #3ab63a;
+	color: white;
+	font-weight: none;
+	box-shadow: none;
+	text-shadow: none;
+	border: 1px solid black;
+}
+.controls-map-admin-title {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: center;
+}
+.control-map-admin-nota {
+	font-weight: bold;
+}
+.popup-map-admin-content {
+	text-align: right;
+}
+.control-sector-admin {
+	display: block;
+  	position: absolute;
+  	top: 10px;
+  	left: 90px;
+  	z-index: 1000 !important;
+  	padding: 6px 8px;
+  	font: 14px/16px Arial, Helvetica, sans-serif;
+  	background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.control-sector-admin h4 {
+    margin: 0 0 5px;
+    color: #777;
+}

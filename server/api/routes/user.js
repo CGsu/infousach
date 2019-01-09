@@ -20,3 +20,6 @@ router.delete("/:id", userController.delete_user);
 router.get("/permiso/:event", userController.permiso_user);
 
 router.get("/permiso/:event/rol/:rol", userController.rol_permiso_user);
+
+router.get("/permiso/:event/rol/:rol/pattern/:pattern", userController.get_mix_search);
+

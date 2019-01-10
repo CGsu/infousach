@@ -5,8 +5,7 @@ import {
 	Marker, 
 	Popup, 
 	TileLayer, 
-	Polygon,
-	FeatureGroup } from 'react-leaflet'
+	Polygon } from 'react-leaflet'
 import Modal from "react-modal";
 import AuthService from './../authorization/AuthService';
 import withAuth from './../authorization/withAuth';
@@ -44,22 +43,75 @@ const btnMapStyles = {
 		border: "1px solid black"
 };
 
-const iconPopup = L.icon({
-	iconUrl: "img/icon/event-oficial.png",
-	iconSize: [20, 35],
-	iconAnchor: [10, 35],
+const iconToiletOn = L.icon({
+	iconUrl: "img/icon/toilet_on.svg",
+	iconSize: [25, 35],
+	iconAnchor: [15, 35],
+	popupAnchor: [0, -35],
+	name: "baño"
+});
+const iconToiletOff = L.icon({
+	iconUrl: "img/icon/toilet_off.svg",
+	iconSize: [35, 40],
+	iconAnchor: [17.5, 35],
+	popupAnchor: [0, -35],
+	name: "baño"
+});
+
+const iconApartmentOn = L.icon({
+	iconUrl: "img/icon/apartment_on.svg",
+	iconSize: [25, 35],
+	iconAnchor: [15, 35],
+	popupAnchor: [0, -35]
+});
+const iconApartmentOff = L.icon({
+	iconUrl: "img/icon/apartment_off.svg",
+	iconSize: [35, 40],
+	iconAnchor: [17.5, 35],
+	popupAnchor: [0, -35]
+});
+
+const iconClassroomOn = L.icon({
+	iconUrl: "img/icon/classroom_on.svg",
+	iconSize: [25, 35],
+	iconAnchor: [15, 35],
+	popupAnchor: [0, -35]
+});
+const iconClassroomOff = L.icon({
+	iconUrl: "img/icon/classroom_off.svg",
+	iconSize: [35, 40],
+	iconAnchor: [17.5, 35],
+	popupAnchor: [0, -35]
+});
+
+const iconEdificioOn = L.icon({
+	iconUrl: "img/icon/edificio_on.svg",
+	iconSize: [25, 35],
+	iconAnchor: [15, 35],
+	popupAnchor: [0, -35]
+});
+const iconEdificioOff = L.icon({
+	iconUrl: "img/icon/edificio_off.svg",
+	iconSize: [35, 40],
+	iconAnchor: [17.5, 35],
+	popupAnchor: [0, -35]
+});
+
+const iconDefaultOn = L.icon({
+	iconUrl: "img/icon/default_on.svg",
+	iconSize: [25, 35],
+	iconAnchor: [15, 35],
+	popupAnchor: [0, -35]
+});
+const iconDefaultOff = L.icon({
+	iconUrl: "img/icon/default_off.svg",
+	iconSize: [35, 40],
+	iconAnchor: [17.5, 35],
 	popupAnchor: [0, -35]
 });
 
 const colores = ["#1fa22e", "#ee7f00", "#fdc300", "#e2001a", 
 				 "#b1c800", "#009ee0", "#a64d94", "#00978f" ];
-
-const styleSector = (i) => {
-	let fcolor = colores[i];
-	return {
-		color: "black"
-	};
-}
 
 Modal.setAppElement("#lanzador-modal");
 
@@ -416,6 +468,8 @@ class AdminMap extends Component {
 				opcionCrear: false,
 				opcionActualizar: false,
 				opcionEliminar: false,
+				opcionHigh: true,
+				opcionLow: true,
 				popupBtn: false
 			},
 			sectores: [],
@@ -424,30 +478,159 @@ class AdminMap extends Component {
 				id: "",
 				state: false,
 				name: ""
-			}
+			},
+			tipolocation: [],
+			lastCoordinates: [],
+			ordershigh: [],
+			onMarkerHigh: [],
+			orderslow: [],
+			onMarkerLow: []
 		};
 		this.controlOpcion = this.controlOpcion.bind(this);
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onMapClick = this.onMapClick.bind(this);
 		this.onPopupClick = this.onPopupClick.bind(this);
 		this.cargaSectores = this.cargaSectores.bind(this);
+		this.cargaTipoUbicaciones = this.cargaTipoUbicaciones.bind(this);
+		this.getTipoUbicaciones = this.getTipoUbicaciones.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.crearUbicacion = this.crearUbicacion.bind(this);
+		this.cargaOrderHigh = this.cargaOrderHigh.bind(this);
+		this.cargaOrderLow = this.cargaOrderLow.bind(this);
+		this.getIcon = this.getIcon.bind(this);
+		this.onIconMouse = this.onIconMouse.bind(this);
+		this.outIconMouse = this.outIconMouse.bind(this);
 	}
 
 	componentWillMount() {
 		this.cargaSectores();
+		this.cargaTipoUbicaciones();
+		this.cargaOrderHigh();
+		this.cargaOrderLow();
 		console.log("Will mount: cuantas veces ingresa!");
 	}
 
+	handleChange(e) {
+		const { name, value } = e.target;
+		this.setState({
+			[name]: value
+		});
+	}
+
+	cargaOrderHigh() {
+		let url = Auth.domain + "/location/orderhigh";
+		let options = {
+			method: "GET"
+		};
+		
+		Auth.fetch(url, options)
+		.then(result => {
+			let a = [];
+			for(let i = 0; i < result.count; i++) {
+				a.push(false);
+			}
+			this.setState({ordershigh: result.ordershigh, onMarkerHigh: a});
+		})
+		.catch(err => console.log(err));
+	}
+
+	cargaOrderLow() {
+		let url = Auth.domain + "/location/orderlow";
+		let options = {
+			method: "GET"
+		};
+		
+		Auth.fetch(url, options)
+		.then(result => {
+			let a = [];
+			for(let i = 0; i < result.count; i++) {
+				a.push(false);
+			}
+			this.setState({orderslow: result.orderslow, onMarkerLow: a});
+		})
+		.catch(err => console.log(err));
+	}
+
+	cargaTipoUbicaciones() {
+		let url = Auth.domain + "/tipolocation";
+		let options = {
+			method: "GET"
+		};
+		
+		Auth.fetch(url, options)
+		.then(result => {
+			this.setState({tipolocation: result.Ubicaciones});
+		})
+		.catch(err => console.log(err));
+	}
+
+	crearUbicacion(e) {
+		e.preventDefault();
+		const t = this.state.crearmap_select.split(",");
+		const idSector = this.state.infoSector.id;
+		const body = {
+			"nombre": this.state.crearmap_nombre,
+			"descripcion": this.state.crearmap_descripcion,
+			"tipo": t[1],
+			"geometria": this.state.lastCoordinates
+		};	
+
+		if (t[0] > 1) {
+			let url = Auth.domain + "/location/orderhigh";
+			let options = {
+				method: "POST",
+				body: JSON.stringify(body),
+			};
+			Auth.fetch(url, options)
+			.then(result => {
+				let idUbicacion = {
+					idLocation: result.orderHighCreado._id
+				};
+				let url = Auth.domain + "/location/sector/" + idSector;
+				options = {
+					method: "PATCH",
+					body: JSON.stringify(idUbicacion)
+				}
+				Auth.fetch(url, options)
+				.then(result => {
+					this.setState({
+						modals: {
+							...this.state.modals,
+							modalCrearMap: false
+						}
+					});
+				})
+				.catch(err => console.log(err));
+			})
+			.catch(err => console.log(err));
+
+		} else {
+			let url = Auth.domain + "/location/orderlow";
+			let options = {
+				method: "POST",
+				body: JSON.stringify(body),
+			};
+			Auth.fetch(url, options)
+			.then(result => {
+				this.setState({
+						modals: {
+							...this.state.modals,
+							modalCrearMap: false
+						}
+					});
+			})
+			.catch(err => console.log(err))
+		}
+	}
+
 	onMapClick(e) {
-		const sector_id = this.state.infoSector.id;
-		console.log("id sector: ", sector_id);
-		console.log("You clicked the map at " + e.latlng);
 		if (this.state.control.opcionCrear) {
 			this.setState({
 				modals: {
 					...this.state.modals,
 					modalCrearMap: true
-				}
+				},
+				lastCoordinates: [e.latlng.lat, e.latlng.lng]
 			});	
 		}
 	}
@@ -457,6 +640,7 @@ class AdminMap extends Component {
 		if (op === "crear") {
 			this.setState({
 				control: {
+					...this.state.control,
 					opcionCrear: !this.state.control.opcionCrear,
 					opcionActualizar: false,
 					opcionEliminar: false,
@@ -466,6 +650,7 @@ class AdminMap extends Component {
 		} else if (op === "update") {
 			this.setState({
 				control: {
+					...this.state.control,
 					opcionCrear: false,
 					opcionActualizar: !this.state.control.opcionActualizar,
 					opcionEliminar: false,
@@ -475,9 +660,26 @@ class AdminMap extends Component {
 		} else if (op === "borrar") {
 			this.setState({
 				control: {
+					...this.state.control,
 					opcionCrear: false,
 					opcionActualizar: false,
 					opcionEliminar: !this.state.control.opcionEliminar,
+					popupBtn: true
+				}
+			})
+		} else if (op === "high") {
+			this.setState({
+				control: {
+					...this.state.control,
+					opcionHigh: !this.state.control.opcionHigh,
+					popupBtn: true
+				}
+			})
+		} else if (op === "low") {
+			this.setState({
+				control: {
+					...this.state.control,
+					opcionLow: !this.state.control.opcionLow,
 					popupBtn: true
 				}
 			})
@@ -496,15 +698,13 @@ class AdminMap extends Component {
 		} else if (nameModal === "update") {
 			this.setState({
 				modals: {
-					...this.state.modals,
-					modalModificarMap: false
+					...this.state.modals
 				}
 			});
 		} else if (nameModal === "borrar") {
 			this.setState({
 				modals: {
-					...this.state.modals,
-					modalEliminarMap: false
+					...this.state.modals
 				}
 			});
 		}
@@ -562,10 +762,60 @@ class AdminMap extends Component {
 		this.setState({
 			onSector: newOnSector, 
 			infoSector: {
-				state: false, name: "", id: ""
+				...this.state.infoSector,
+				state: false, name: ""
 			}
 		});
 	}
+
+	getTipoUbicaciones() {
+		return (
+			this.state.tipolocation.map((tipo, i) => {
+				return (
+					<option key={i} value={[tipo.orden, tipo._id]}> {tipo.nombre}</option>
+				)
+			}));
+	}
+
+	getIcon(tipo, op) {
+		if (tipo === "baño") return !op? iconToiletOn: iconToiletOff;
+		if (tipo === "departamento") return !op? iconApartmentOn : iconApartmentOff;
+		if (tipo === "edificio") return !op? iconEdificioOn : iconEdificioOff;
+		if (tipo === "sala") return !op? iconClassroomOn : iconClassroomOff;
+		return !op? iconDefaultOn : iconDefaultOff;
+	}
+
+	onIconMouse(e) {
+		e.target.openPopup();
+		const num_sector = e.target.options.name;
+		const value = e.target.options.value;
+		if (value === "high") {
+			const newOnSector = this.state.onMarkerHigh;
+			newOnSector[num_sector] = true;
+			this.setState({onMarkerHigh: newOnSector});
+		} else  {
+			const newOnSector = this.state.onMarkerLow;
+			newOnSector[num_sector] = true;
+			this.setState({onMarkerLow: newOnSector});
+		}
+	}
+
+	outIconMouse(e) {
+		e.target.closePopup();
+		const num_sector = e.target.options.name;
+		const value = e.target.options.value;
+		if (value === "high") {
+			const newOnSector = this.state.onMarkerHigh;
+			newOnSector[num_sector] = false;
+			this.setState({onMarkerHigh: newOnSector});
+		} else  {
+			const newOnSector = this.state.onMarkerLow;
+			newOnSector[num_sector] = false;
+			this.setState({onMarkerLow: newOnSector});
+		}
+	}
+
+
 
 	render() {
 		const position = [this.state.location.lat, this.state.location.lng];
@@ -591,10 +841,62 @@ class AdminMap extends Component {
 	        						descriptyon={sector.descripcion} key={sector._id}
 	        					/>
 	        				);
-	        			} )
+	        			})
+	        		}
+	        		{
+	        			this.state.control.opcionHigh ? 
+	        			(
+	        			this.state.ordershigh.map((oh, i) => {
+	        				return (
+	        					<Marker key={oh._id} position={oh.geometria}
+	        						icon={this.getIcon(oh.tipo, this.state.onMarkerHigh[i])} 
+	        						onMouseOver={this.onIconMouse.bind(this)} 
+	        						onMouseOut={this.outIconMouse.bind(this)} 
+	        						name={i} value={"high"}
+	        					>
+	        					<Popup>
+	        						<h1>{oh.nombre}</h1> <br/>
+	        						<p>{oh.descripcion}</p>
+	        						<br />
+	          						{
+	          							this.state.control.popupBtn ?
+	          							(
+			          						<p className="popup-map-admin-content">
+			          							<span className="popup-map-admin-launcher"
+			          					 		onClick={this.onPopupClick.bind(this)}>
+			          					 		ok
+			          							</span>
+			          						</p>	
+	          							)
+	          							: ""
+	          						}
+	        					</Popup>
+	        					</Marker>
+	        				)
+	        			})
+	        			) : ""
+	        		}
+	        		{
+	        			this.state.control.opcionLow ?
+	        			(
+	        			this.state.orderslow.map((ol, i) => {
+	        				return (
+	        					<Marker key={ol._id} position={ol.geometria} 
+	        						icon={this.getIcon(ol.tipo, this.state.onMarkerLow[i])} 
+	        						onMouseOver={this.onIconMouse.bind(this)} 
+	        						onMouseOut={this.outIconMouse.bind(this)} 
+	        						name={i} value={"low"}
+	        					>
+	        					<Popup>
+	        						<h1>{ol.nombre}</h1> <br/>
+	        						<p>{ol.descripcion}</p>
+	        					</Popup>
+	        					</Marker>
+	        				)
+	        			})
+	        			) : ""
 	        		}
 	        		
-
 	      		</Map>
 
 	      		<div className="control-sector-admin">
@@ -610,6 +912,25 @@ class AdminMap extends Component {
 	        		<div className="wrapper wrapper-map">
 	        			<h2 className="controls-map-admin-title">OPCIONES</h2>
 	        			<p>
+	        				<span>
+	        					<small className="control-map-admin-nota">
+	        					Filtro de ubicaciones
+	        					</small>
+	        				</span>
+	        				<br/>
+	        				<span className="control-map-admin-filter" name="high"
+	        					onClick={this.controlOpcion.bind(this)}
+	        					style={this.state.control.opcionHigh ? btnMapStyles : {} }
+	        				  >
+	        					High
+	        				</span>
+	        				<span className="control-map-admin-filter" name="low"
+	        					onClick={this.controlOpcion.bind(this)}
+	        					style={this.state.control.opcionLow ? btnMapStyles : {} }
+	        				  >
+	        					Low
+	        				</span>
+	        				<br/>
 	        				<span className="control-map-admin-opt" name="crear"
 	        					onClick={this.controlOpcion.bind(this)}
 	        					style={this.state.control.opcionCrear ? btnMapStyles : {} }
@@ -659,12 +980,29 @@ class AdminMap extends Component {
 										</button>
 									</div>
 									<div className="modal-body lanzador-modal-body">
+										<div className="form-group lanzador-form-control">
+											<label>Tipo Ubicacion</label>
+											<select multiple size="3" name="crearmap_select" id="tipoubicacion" 
+												className="form-control" onChange={this.handleChange}>
+												{this.getTipoUbicaciones()}
+											</select>
+										</div>
+										<div className="form-group lanzador-form-control">
+											<label>Nombre</label>
+											<input className="form-control" type="text" placeholder="Nombre..." 
+	  											name="crearmap_nombre" onChange={this.handleChange}/>
+										</div>
+										<div className="form-group lanzador-form-control">
+											<label>Descripcion</label>
+											<input className="form-control" type="text" placeholder="Descripcion..." 
+	  											name="crearmap_descripcion" onChange={this.handleChange}/>
+										</div>
 									</div>
 									<div className="modal-footer lanzador-modal-footer">
 										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
 											onClick={this.closeModalMap.bind(this)} name="crear" />
 										<input className="btn btn-info" value="Save"
-											type="submit" />
+											type="submit" onClick={this.crearUbicacion.bind(this)}/>
 									</div>
 								</form>
 							</div>
@@ -677,7 +1015,7 @@ class AdminMap extends Component {
 						overlay={true}
 						animationType="fade"
 						style={customStyles}
-						>
+					>
 					<div className="lanzador-modal">
 						<div className="modal-dialog lanzador-modal-dialog">
 							<div className="modal-content lanzador-modal-content">
@@ -738,7 +1076,7 @@ class AdminMap extends Component {
 	}
 
 }
-
+//---------------------------------------------------------------------------------
 class Admin extends Component {
 
 	constructor() {

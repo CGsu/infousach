@@ -10,7 +10,7 @@ const orderHighSchema = mongoose.Schema({
 		ref: "tipoUbicacion",
 		required: true
 	},
-	count: {typer: Number, default: 0},
+	count: {type: Number, default: 0},
 	locations: [
 		{
 			type: mongoose.Schema.Types.ObjectId,

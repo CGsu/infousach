@@ -1,0 +1,8 @@
+{"_id":{"$oid":"5c3683a73b738c0e5021f7de"},"descripcion":"division universitario que reune un área de estudio","nombre":"facultad","orden":10,"__v":0}
+{"_id":{"$oid":"5c3683f43b738c0e5021f7df"},"descripcion":"construccion que reune dependencias","nombre":"departamento","orden":10,"__v":0}
+{"_id":{"$oid":"5c3684033b738c0e5021f7e0"},"descripcion":"construccion que reune dependencias","nombre":"edificio","orden":10,"__v":0}
+{"_id":{"$oid":"5c36842c3b738c0e5021f7e1"},"descripcion":"espacio cerrado para la realización de una actividad","nombre":"sala","orden":1,"__v":0}
+{"_id":{"$oid":"5c3684a83b738c0e5021f7e2"},"descripcion":"instalación que provee condiciones controladas en las que se pueden realizar investigaciones científicas o tecnológicas, experimentos y mediciones.","nombre":"laboratorio","orden":1,"__v":0}
+{"_id":{"$oid":"5c3684ec3b738c0e5021f7e3"},"descripcion":"espacio público abierto.","nombre":"plaza","orden":1,"__v":0}
+{"_id":{"$oid":"5c36852d3b738c0e5021f7e4"},"descripcion":"lugar para actividades higiénicas.","nombre":"baño","orden":1,"__v":0}
+{"_id":{"$oid":"5c3685583b738c0e5021f7e5"},"descripcion":"recinto cerrado destinado a un trabajo","nombre":"oficina","orden":1,"__v":0}

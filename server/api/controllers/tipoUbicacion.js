@@ -12,7 +12,7 @@ exports.tipoUbicacion_get_all = (req, res, next) => {
 					_id: doc._id,
 					nombre: doc.nombre,
 					descripcion: doc.descripcion,
-					ordenSugerido: doc.ordenSugerido
+					orden: doc.orden
 				}
 			})
 		}
@@ -28,7 +28,7 @@ exports.tipoUbicacion_crear_tipo = (req, res, next) => {
 		_id: new mongoose.Types.ObjectId(),
 		nombre: req.body.nombre.toLowerCase(),
 		descripcion: req.body.descripcion.toLowerCase(),
-		ordenSugerido: orden
+		orden: req.body.orden
 	});
 	tipoubicacion.save()
 	.then(result => {
@@ -38,7 +38,7 @@ exports.tipoUbicacion_crear_tipo = (req, res, next) => {
 				_id: result._id,
 				nombre: result.nombre,
 				descripcion: result.descripcion,
-				ordenSugerido: result.ordenSugerido
+				orden: result.orden
 			}
 		});
 	})

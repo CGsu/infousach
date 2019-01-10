@@ -42,7 +42,6 @@ app.use("/login", loginRoutes);
 app.use("/location", locationRoutes);
 app.use("/tipolocation", tipoLocationRoutes);
 
-
 app.use((req, res, next) => {
 	const error = new Error("Not found");
 	error.status = 404;
@@ -50,6 +49,7 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
+	console.log(error);
 	res.status(error.status || 500);
 	res.json({
 		error: {

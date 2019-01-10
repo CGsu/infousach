@@ -25,7 +25,7 @@
 .controls-map-admin .wrapper-map {
 	padding: 30px;
 }
-.control-map-admin-opt, .popup-map-admin-launcher {
+.control-map-admin-opt, .popup-map-admin-launcher, .control-map-admin-filter {
 	padding: 0 0.563rem;
 	font-size: 12px;
 	line-height: 2.23rem;

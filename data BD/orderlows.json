@@ -1,0 +1,2 @@
+{"_id":{"$oid":"5c36b6419f5bab29c464cb63"},"geometria":[-33.44664339248856,-70.68323493003847],"nombre":"260","descripcion":"ubicado en el 3er piso","tipo":{"$oid":"5c36842c3b738c0e5021f7e1"},"__v":0}
+{"_id":{"$oid":"5c36b65c9f5bab29c464cb64"},"geometria":[-33.44640168450904,-70.68123936653139],"nombre":"baño","descripcion":"servicio de sanidad del departamento, 1er piso","tipo":{"$oid":"5c36852d3b738c0e5021f7e4"},"__v":0}

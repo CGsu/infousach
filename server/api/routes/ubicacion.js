@@ -16,5 +16,6 @@ router.patch("/sector/:id", ubicacionController.locations_add_orderhigh);
 //-----ORDER HIGH---
 router.get("/orderhigh", ubicacionController.locations_get_orderhigh);
 router.post("/orderhigh", ubicacionController.locations_insert_high);
+router.patch("/orderhigh/:id", ubicacionController.locations_add_orderlow);
 router.get("/orderlow", ubicacionController.locations_get_orderlow);
 router.post("/orderlow", ubicacionController.locations_insert_low);

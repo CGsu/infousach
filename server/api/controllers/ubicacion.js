@@ -77,7 +77,6 @@ exports.locations_get_sector = (req, res, next) => {
 exports.locations_add_orderhigh = (req, res, next) => {
 	const id = req.params.id;
 	const newLocation = req.body.idLocation;
-	console.log("id: ", id, "     newLocation: ", newLocation);
 	Ubicacion.update({_id: id}, {$push: {locations: newLocation}})
 	.then(result => {
 		console.log(result);
@@ -143,6 +142,22 @@ exports.locations_insert_high = (req, res, next) => {
 	});
 };
 
+// Agrega ubicaciones de orden Low a una ubicacion OrderHigh
+exports.locations_add_orderlow = (req, res, next) => {
+	const id = req.params.id;
+	const newLocations = req.body.dependencias;
+	console.log("Llegue!!");
+	console.log(newLocations, "		id: ", id);
+	OrderHigh.update({_id: id}, { $addToSet: {locations: newLocations} })
+	.then(result => {
+		console.log(result);
+		res.status(200).json({ message: "Ubicacion Actualizada" });
+	})
+	.catch(err => { console.log(err); res.status(500).json({ error: err }) });
+};
+
+//--------------------------FUNCIONES ASOCIADAS A UBICACACIONES TIPO ORDER LOW-------------------------
+// Devuelve los orderlow
 exports.locations_get_orderlow = (req, res, next) => {
 	OrderLow.find({})
 	.populate("tipo")

@@ -1,0 +1,13 @@
+.card{
+    background-color: #7386D5;
+}
+
+.card-body{
+    background-color: whitesmoke;
+    color: black;
+}
+
+.card-header:hover{
+    color: #7386D5;
+    background: #fff;
+}

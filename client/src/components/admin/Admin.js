@@ -5,7 +5,7 @@ import {
 	Marker, 
 	Popup, 
 	TileLayer, 
-	Polygon } from 'react-leaflet'
+	Polygon } from 'react-leaflet';
 import Modal from "react-modal";
 import AuthService from './../authorization/AuthService';
 import withAuth from './../authorization/withAuth';

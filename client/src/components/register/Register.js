@@ -109,9 +109,10 @@ const colores = ["#1fa22e", "#ee7f00", "#fdc300", "#e2001a",
 Modal.setAppElement("#lanzador-modal");
 
 class RegisterMap extends Component {
-	constructor() {
+	constructor(props) {
 		super();
 		this.state = {
+			usuario: props.usuario,
 			location: {
 				lat: -33.4482,
 	      		lng: -70.6845	
@@ -165,8 +166,14 @@ class RegisterMap extends Component {
 		this.cargaOrderHigh();
 		this.cargaOrderLow();
 		this.cargaCategorias();
-		console.log("Will mount: cuantas veces ingresa!");
 	}
+
+	handleLangChange () { 
+		let value = {};
+		value["op"] = 1;
+		value["categorias"] = this.state.categorias;
+		console.log(value); 
+    } 
 
 	cargaSectores() {
 		let url = Auth.domain + "/location/sector";
@@ -231,6 +238,7 @@ class RegisterMap extends Component {
 		let options = { method: "GET"};
 		Auth.fetch(url, options)
 		.then(result => {
+			this.props.onGetCategorias(result);
 			this.setState({
 				categorias: result.Categorias
 			});
@@ -358,7 +366,7 @@ class RegisterMap extends Component {
 		return (
 			<div className="admin-map">
 				<Map className="admin-map-charge" center={position} zoom={this.state.config.zoom}
-				 onClick={this.onMapClick.bind(this)} >
+				 onClick={this.onMapClick.bind(this)}>
 	        		<TileLayer
 	          			url={this.state.config.tiles}
 	          			attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -442,8 +450,7 @@ class RegisterMap extends Component {
 	        		>
 	        			Quitar tipo 2
 	        		</span>
-	      		</div>	
-
+	      		</div>
         	</div>
 		);
 	}
@@ -469,11 +476,13 @@ class Register extends Component {
 			},
 			modals: {
 				modalAsociar: false
-			}
+			},
+			categorias: []
 
 		};
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onDetalle = this.onDetalle.bind(this);
+		this.cargaCategorias = this.cargaCategorias.bind(this);
 	}
 
 	componentWillMount() {
@@ -492,6 +501,11 @@ class Register extends Component {
 	handleLogout() {
     	Auth.logout();
     	this.props.history.replace('/login');
+  	}
+
+  	cargaCategorias(data) {
+  		console.log(data);
+  		this.setState({categorias: data.Categorias});
   	}
 
   	closeModalMap(e) {
@@ -536,6 +550,13 @@ class Register extends Component {
   		});
   	}
 
+  	handleRegisterMap(value) {
+  		const op = value.opcion;
+  		if (op === 1) {
+  			this.setState({categorias: value.categorias});
+  		}
+  	}
+
 	render() {
 		return (
 			<div className="register-body">
@@ -556,8 +577,17 @@ class Register extends Component {
 
 							    <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
       								<div className="card-body">
-        								Aqui pondriamos filtros
-      								</div>
+	      								{
+	      									this.state.categorias.map((categoria, i) => {
+	      										return (
+													<div key={i} className="custom-control custom-checkbox">
+														<input defaultChecked type="checkbox" className="custom-control-input" id={categoria.name}></input>
+														<label className="custom-control-label" htmlFor={categoria.name}>{categoria.name}</label>
+													</div>
+	      										);
+	      									})
+	      								}
+						      		</div>
     							</div>
   							</div>
 
@@ -651,7 +681,8 @@ class Register extends Component {
 
 						<div id="register-content-option" className="container-fluid container-options d-flex justify-content-center
 							align-items-start wraper board-work">
-							<RegisterMap />	
+							<RegisterMap usuario={this.state.usuario}
+							 onGetCategorias={this.cargaCategorias.bind(this)} />	
 						</div>
 					</div>
 				</div>
@@ -665,15 +696,76 @@ class Register extends Component {
 							<div className="modal-content lanzador-modal-content">
 								<form>
 									<div className="modal-header lanzador-modal-header">
-										<h4 className="modal-title lanzador-modal-title">Detalle Evento</h4>
+										<h4 className="modal-title lanzador-modal-title">Evento : Nombre</h4>
 										<button type="button" className="close" data-dismiss="modal" name="asociar"
 											aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
 										&times;
 										</button>
 									</div>
 									<div className="modal-body lanzador-modal-body">
-												<p>¿Estas seguro de querer asociar estas Ubicación?</p>
-												<p className="text-warning"><small>Esta acción no se puede deshacer</small></p>  
+											<div className = "row">
+												<div className = "col-sm-3">
+													Descripción:
+												</div>
+												<div className ="col"> 
+													Charla dada por estemen para aprender sobre diseño
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Ubicación:
+												</div>
+												<div className ="col"> 
+													Cite Camp
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Fecha:
+												</div>
+												<div className ="col"> 
+													13/01/2019
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Creador:
+												</div>
+												<div className ="col"> 
+													EsteMen
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Tipo:
+												</div>
+												<div className ="col"> 
+													Oficial
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Categorias:
+												</div>
+												<div className ="col"> 
+													Charla
+												</div>
+											</div>
 									</div>
 									<div className="modal-footer lanzador-modal-footer">
 										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"

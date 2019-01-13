@@ -426,7 +426,48 @@ class RegisterMap extends Component {
 	        						name={i} value={"high"}
 	        					>
 	        					<Popup>
-	        						colocar contenido
+	        						
+								<div className = "row">
+										<div className ="col">
+											<div className ="text-center">
+												<h5>{oh.nombre}</h5> <br/>
+											</div>
+										</div>
+
+									</div>
+
+									<hr></hr>
+
+									<div className = "row">
+										<div className = "col-sm-3">
+											<p>Descripción:</p>
+										</div>
+										<div className ="col"> 
+											<p>{oh.descripcion}</p>
+										</div>
+									</div>
+
+									<hr></hr>
+
+									<div className = "row">
+										<div className = "col-sm-3">
+											<p>Tipo:</p>
+										</div>
+										<div className ="col"> 
+											<p>{oh.tipo}</p>
+										</div>
+									</div>
+
+									<hr></hr>
+
+									<span className="popup-map-admin-launcher">
+										Crear Evento
+									</span>
+
+									<span className="popup-map-admin-launcher">
+										Ver Eventos
+									</span>
+
 	        					</Popup>
 	        					</Marker>
 	        				)
@@ -443,9 +484,49 @@ class RegisterMap extends Component {
 	        						name={i} value={"low"} id={ol._id}
 	        					>
 	        					<Popup>
-	        						<h1>{ol.nombre}</h1> <br/>
-	        						<p>{ol.descripcion}</p>
-	        						<p>{ol.tipo}</p>
+
+									<div className = "row">
+										<div className ="col">
+											<div className ="text-center">
+												<h5>{ol.nombre}</h5> <br/>
+											</div>
+										</div>
+
+									</div>
+
+									<hr></hr>
+
+									<div className = "row">
+										<div className = "col-sm-3">
+											<p>Descripción:</p>
+										</div>
+										<div className ="col"> 
+											<p>{ol.descripcion}</p>
+										</div>
+									</div>
+
+									<hr></hr>
+
+									<div className = "row">
+										<div className = "col-sm-3">
+											<p>Tipo:</p>
+										</div>
+										<div className ="col"> 
+											<p>{ol.tipo}</p>
+										</div>
+									</div>
+									
+									<hr></hr>
+
+									<span className="popup-map-admin-launcher">
+										Crear Evento
+									</span>
+
+									<span className="popup-map-admin-launcher">
+										Ver Eventos
+									</span>
+
+
 	        					</Popup>
 	        					</Marker>
 	        				)
@@ -594,6 +675,7 @@ class Register extends Component {
 	render() {
 		return (
 			<div className="register-body">
+
 				<div className="wraper register-wrapper">
 					<nav id="register-sidebar" className={this.state.controlSidebar.sideNavBar} >
 						<div className="sidebar-header register-sidebar-header">
@@ -695,6 +777,9 @@ class Register extends Component {
 						
 
 					</nav>
+				  	
+
+					  
 
 					<div id="register-content" className={this.state.controlSidebar.content} >
 						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -720,7 +805,9 @@ class Register extends Component {
 							 onGetEventos={this.cargarEventos.bind(this)} />	
 						</div>
 					</div>
+					
 				</div>
+
 				<Modal isOpen={this.state.modals.modalAsociar}
 					transparent={true}
 					animationType="fade"

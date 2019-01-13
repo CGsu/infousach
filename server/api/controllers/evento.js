@@ -9,22 +9,21 @@ exports.get_event_enabled = (req, res, next) => {
 	Evento.find({estado: true}, null, {sort: {fecha: 1} })
 	.populate("categoria")
 	.populate("creador")
-	.populate("ubicacion")
 	.then(docs => {
 		const respuesta = {
 			count: docs.length,
 			Eventos: docs.map(doc => {
 				return {
-					id: result._id,
-					nombre: result.nombre,
-					descripcion: result.descripcion,
-					fecha: result.fecha,
-					horaInicio: resul.horaInicio,
-					tipo: result.tipo,
-					estado: result.estado,
-					categoria: result.categoria,
-					creador: result.creador,
-					ubicacion: result.ubicacion
+					id: doc._id,
+					nombre: doc.nombre,
+					descripcion: doc.descripcion,
+					fecha: doc.fecha,
+					horaInicio: doc.horaInicio,
+					tipo: doc.tipo,
+					estado: doc.estado,
+					categoria: doc.categoria,
+					creador: doc.creador,
+					ubicacion: doc.ubicacion
 				}
 			})
 		};

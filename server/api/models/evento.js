@@ -21,7 +21,6 @@ const eventoSchema = mongoose.Schema({
 	},
 	ubicacion: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Ubicacion",
 		required: true
 	}
 });

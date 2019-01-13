@@ -11,6 +11,7 @@ import AuthService from './../authorization/AuthService';
 import withAuth from './../authorization/withAuth';
 import "./register-map.css";
 import "./register.css";
+import { relative } from "path";
 const Auth = new AuthService();
 
 const customStyles = {
@@ -20,7 +21,9 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
+	transform             : 'translate(-50%, -50%)',
+	height                :  '100vh',
+    overflow              :  'scroll',
     border: "none",
     background: "none"
   },
@@ -351,6 +354,27 @@ class RegisterMap extends Component {
 		});
 	}
 
+
+	onCrear() {
+		this.setState({
+			modals: {
+				modalCrearEvent: true
+			}
+		});
+	}
+
+	closeModalMap(e) {
+		const nameModal = e.target.getAttribute("name");
+		if (nameModal === "CrearEvent") {
+			this.setState({
+				modals: {
+					...this.state.modals,
+					modalCrearEvent: false
+				}
+			});
+		}
+	}
+
 	onSectorOut(e) {
 		const num_sector = e.target.options.name;
 		const newOnSector = this.state.onSector;
@@ -460,7 +484,8 @@ class RegisterMap extends Component {
 
 									<hr></hr>
 
-									<span className="popup-map-admin-launcher">
+									<span className="popup-map-admin-launcher"
+									onClick={this.onCrear.bind(this)}>
 										Crear Evento
 									</span>
 
@@ -518,7 +543,8 @@ class RegisterMap extends Component {
 									
 									<hr></hr>
 
-									<span className="popup-map-admin-launcher">
+									<span className="popup-map-admin-launcher"
+									onClick={this.onCrear.bind(this)}>
 										Crear Evento
 									</span>
 
@@ -561,7 +587,111 @@ class RegisterMap extends Component {
 	        			Quitar tipo 2
 	        		</span>
 	      		</div>
+
+
+
+				  <Modal isOpen={this.state.modals.modalCrearEvent}
+					transparent={true}
+					animationType="fade"
+					style={customStyles}
+					>
+					<div className="lanzador-modal">
+						<div className="modal-dialog lanzador-modal-dialog">
+							<div className="modal-content lanzador-modal-content">
+								<form>
+									<div className="modal-header lanzador-modal-header">
+										<h4 className="modal-title lanzador-modal-title">Ingrese Detalles</h4>
+										<button type="button" className="close" data-dismiss="modal" name="CrearEvent"
+											aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
+										&times;
+										</button>
+									</div>
+									<div className="modal-body lanzador-modal-body">
+										<form action="/action_page.php">
+											<div class="form-group">
+												<div className = "row">
+													<div className = "col-sm-4">
+														<label for="nombre">Nombre:</label>
+													</div>
+													<div className ="col"> 
+														<input type="text" class="form-control" id="nombre"></input>
+													</div>
+												</div>
+											</div>
+											<hr></hr>
+
+											<div class="form-group">  
+												<div className = "row">
+													<div className = "col-sm-4">
+														<label for="descrip">Descripción:</label>
+													</div>
+													<div className ="col"> 
+														<textarea class="form-control" rows="3" id="descrip"></textarea>
+													</div>
+												</div>
+
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-4">
+													<label for="date">Fecha:</label>
+												</div>
+												<div className ="col"> 
+													<input id="date" type="date" class="form-control"></input>	
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+
+												<div className = "col-sm-4">
+													<label for="hora">Hora Inicio:</label>
+												</div>  
+												<div className ="col"> 
+													<input id="hora" type="time" class="form-control"></input>
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className ="col">
+												{
+	      									this.state.categorias.map((categoria, i) => {
+	      										return (
+													<div key={i} className="custom-control custom-checkbox">
+														<input default type="checkbox" className="custom-control-input" id={categoria.name+'new'}></input>
+														<label className="custom-control-label" htmlFor={categoria.name+'new'}>{categoria.name}</label>
+													</div>
+	      										);
+	      									})
+	      								}
+												</div>
+
+											</div>  
+
+										</form>	
+									</div>
+									<div className="modal-footer lanzador-modal-footer">
+										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
+												onClick={this.closeModalMap.bind(this)} name="CrearEvent" />
+										<input type="submit" className="btn btn-danger" value="Crear"
+												onClick={this.closeModalMap.bind(this)} />
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</Modal>
+
         	</div>
+
+
+
+
 		);
 	}
 
@@ -807,6 +937,9 @@ class Register extends Component {
 					</div>
 					
 				</div>
+				
+
+
 
 				<Modal isOpen={this.state.modals.modalAsociar}
 					transparent={true}

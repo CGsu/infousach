@@ -19,6 +19,7 @@ exports.get_event_enabled = (req, res, next) => {
 					nombre: result.nombre,
 					descripcion: result.descripcion,
 					fecha: result.fecha,
+					horaInicio: resul.horaInicio,
 					tipo: result.tipo,
 					estado: result.estado,
 					categoria: result.categoria,
@@ -38,10 +39,11 @@ exports.get_event_enabled = (req, res, next) => {
 // Inserta un nuevo evento al sistema
 exports.insert_new_event = (req, res, next) => {
 	const evento = new Evento ({
-		id: new mongoose.Types.ObjectId(),
+		_id: new mongoose.Types.ObjectId(),
 		nombre: req.body.nombre.toLowerCase(),
 		descripcion: req.body.descripcion.toLowerCase(),
 		fecha: req.body.fecha,
+		horaInicio: req.body.horaInicio,
 		tipo: req.body.tipo.toLowerCase(),
 		estado: req.body.estado,
 		categoria: req.body.categoria,
@@ -57,6 +59,7 @@ exports.insert_new_event = (req, res, next) => {
 				nombre: result.nombre,
 				descripcion: result.descripcion,
 				fecha: result.fecha,
+				horaInicio: result.horaInicio,
 				tipo: result.tipo,
 				estado: result.estado,
 				categoria: result.categoria,

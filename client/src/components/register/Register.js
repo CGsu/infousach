@@ -125,9 +125,7 @@ class RegisterMap extends Component {
 				zoom: 16
 			},
       		modals: {
-				modalCrearMap: false,
-				modalModificarMap: false,
-				modalEliminarMap: false,
+      			modalCrearEvent: false, 
 				modalAsociar: false
       		},
       		filter: {
@@ -140,6 +138,10 @@ class RegisterMap extends Component {
 				id: "",
 				state: false,
 				name: ""
+			},
+			newEvento: {
+				categorias: [], 
+				idUbicacion: ""
 			},
 			tipolocation: [],
 			lastCoordinates: [],
@@ -265,24 +267,73 @@ class RegisterMap extends Component {
 		.catch(err => console.log(err));
 	}
 
-	crearEvento() {
-		let url = Auth.domain + "/evento";
-		let options = {
-			method: "POST",
-			body: {}
-		};
-		Auth.fetch(url, options)
-		.then(result => {
-			console.log(result);
-		})
-		.catch(err => console.log(err));
+	crearEvento(e) {
+		const validator = Object.keys(this.state.newEvento).length;
+		if (validator === 6 && this.state.newEvento.length != 0) {
+			let url = Auth.domain + "/evento";
+			const body = {
+				nombre: this.state.newEvento.nombre_evento,
+				descripcion: this.state.newEvento.descripcion_evento,
+				fecha: new Date(this.state.newEvento.fecha_evento),
+				horaInicio: this.state.newEvento.hora_evento,
+				tipo: this.state.usuario.evt_asociado,
+				estado: true,
+				categoria: this.state.newEvento.categorias,
+				creador: this.state.usuario.id,
+				ubicacion: this.state.newEvento.idUbicacion
+			};
+			let options = {
+				method: "POST",
+				body: JSON.stringify(body)
+			};
+			Auth.fetch(url, options)
+			.then(result => {
+				console.log(result);
+				this.setState({
+					modals: {
+						...this.state.modals,
+						modalCrearEvent: false
+					}
+				});
+			})
+			.catch(err => console.log(err));
+		} else {
+			console.log("Falta completar los campos");
+			this.setState({
+				modals: {
+					...this.state.modals,
+					modalCrearEvent: false
+				}
+			});
+		}
 	}
 
 	handleChange(e) {
-		const { name, value } = e.target;
-		this.setState({
-			[name]: value
-		});
+		const { name }  = e.target;
+		if (name === "categoria_evento") {
+			let idCategoria = e.target.getAttribute("clave");
+			const newAddCategoria = this.state.newEvento.categorias;
+			const index = newAddCategoria.indexOf(idCategoria);
+			if (index > -1) {
+				newAddCategoria.splice(index, 1);
+			} else {
+				newAddCategoria.push(idCategoria);
+			}
+			this.setState({
+				newEvento: {
+					...this.state.newEvento,
+					categorias: newAddCategoria
+				}
+			});
+		} else {
+			const { name, value } = e.target;
+			this.setState({
+				newEvento: {
+					...this.state.newEvento,
+					[name]: value
+				}
+			});
+		}
 	}
 
 	onMapClick(e) {
@@ -323,21 +374,13 @@ class RegisterMap extends Component {
 	}
 
 	onPopupClick(e) {
-		if (this.state.control.opcionActualizar) {
-			this.setState({
-				modals: {
-					...this.state.modals,
-					modalModificarMap: true
-				}
-			});
-		} else if (this.state.control.opcionEliminar) {
-			this.setState({
-				modals: {
-					...this.state.modals,
-					modalEliminarMap: true
-				}
-			});
-		}
+		const idUbicacion = e.target.options.id;
+		this.setState({
+			newEvento: {
+				...this.state.newEvento,
+				idUbicacion: idUbicacion
+			}
+		})
 	}
 
 	onSector(e) {
@@ -354,10 +397,10 @@ class RegisterMap extends Component {
 		});
 	}
 
-
 	onCrear() {
 		this.setState({
 			modals: {
+				...this.state.modals,
 				modalCrearEvent: true
 			}
 		});
@@ -448,9 +491,12 @@ class RegisterMap extends Component {
 	        					<Marker key={oh._id} position={oh.geometria}
 	        						icon={this.getIcon(oh.tipo, this.state.onMarkerHigh[i])}	
 	        						name={i} value={"high"}
+	        						onClick={this.onPopupClick.bind(this)}
+	        						id={oh._id}
 	        					>
+
 	        					<Popup>
-	        						
+
 								<div className = "row">
 										<div className ="col">
 											<div className ="text-center">
@@ -485,7 +531,7 @@ class RegisterMap extends Component {
 									<hr></hr>
 
 									<span className="popup-map-admin-launcher"
-									onClick={this.onCrear.bind(this)}>
+										onClick={this.onCrear.bind(this)}>
 										Crear Evento
 									</span>
 
@@ -588,9 +634,7 @@ class RegisterMap extends Component {
 	        		</span>
 	      		</div>
 
-
-
-				  <Modal isOpen={this.state.modals.modalCrearEvent}
+				<Modal isOpen={this.state.modals.modalCrearEvent}
 					transparent={true}
 					animationType="fade"
 					style={customStyles}
@@ -598,90 +642,90 @@ class RegisterMap extends Component {
 					<div className="lanzador-modal">
 						<div className="modal-dialog lanzador-modal-dialog">
 							<div className="modal-content lanzador-modal-content">
-								<form>
-									<div className="modal-header lanzador-modal-header">
-										<h4 className="modal-title lanzador-modal-title">Ingrese Detalles</h4>
-										<button type="button" className="close" data-dismiss="modal" name="CrearEvent"
-											aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
-										&times;
-										</button>
-									</div>
-									<div className="modal-body lanzador-modal-body">
-										<form action="/action_page.php">
-											<div class="form-group">
-												<div className = "row">
-													<div className = "col-sm-4">
-														<label for="nombre">Nombre:</label>
-													</div>
-													<div className ="col"> 
-														<input type="text" class="form-control" id="nombre"></input>
-													</div>
-												</div>
-											</div>
-											<hr></hr>
-
-											<div class="form-group">  
-												<div className = "row">
-													<div className = "col-sm-4">
-														<label for="descrip">Descripción:</label>
-													</div>
-													<div className ="col"> 
-														<textarea class="form-control" rows="3" id="descrip"></textarea>
-													</div>
-												</div>
-
-											</div>
-
-											<hr></hr>
-
+								<div className="modal-header lanzador-modal-header">
+									<h4 className="modal-title lanzador-modal-title">Ingrese Detalles</h4>
+									<button type="button" className="close" data-dismiss="modal" name="CrearEvent"
+										aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
+									&times;
+									</button>
+								</div>
+								<div className="modal-body lanzador-modal-body">
+									<form>
+										<div className="form-group">
 											<div className = "row">
 												<div className = "col-sm-4">
-													<label for="date">Fecha:</label>
+													<label htmlFor="nombre">Nombre:</label>
 												</div>
 												<div className ="col"> 
-													<input id="date" type="date" class="form-control"></input>	
+													<input type="text" className="form-control" id="nombre" 
+													 onChange={this.handleChange} name="nombre_evento"></input>
 												</div>
 											</div>
+										</div>
+										<hr></hr>
 
-											<hr></hr>
-
+										<div className="form-group">  
 											<div className = "row">
-
 												<div className = "col-sm-4">
-													<label for="hora">Hora Inicio:</label>
-												</div>  
+													<label htmlFor="descrip">Descripción:</label>
+												</div>
 												<div className ="col"> 
-													<input id="hora" type="time" class="form-control"></input>
+													<textarea className="form-control" rows="3" id="descrip" 
+													  onChange={this.handleChange} name="descripcion_evento"></textarea>
 												</div>
 											</div>
+										</div>
 
-											<hr></hr>
+										<hr></hr>
 
-											<div className = "row">
-												<div className ="col">
-												{
-	      									this.state.categorias.map((categoria, i) => {
-	      										return (
-													<div key={i} className="custom-control custom-checkbox">
-														<input default type="checkbox" className="custom-control-input" id={categoria.name+'new'}></input>
-														<label className="custom-control-label" htmlFor={categoria.name+'new'}>{categoria.name}</label>
-													</div>
-	      										);
-	      									})
-	      								}
-												</div>
+										<div className = "row">
+											<div className = "col-sm-4">
+												<label htmlFor="date">Fecha:</label>
+											</div>
+											<div className ="col"> 
+												<input id="date" type="date" className="form-control"
+												 onChange={this.handleChange} name="fecha_evento"></input>	
+											</div>
+										</div>
 
+										<hr></hr>
+
+										<div className = "row">
+
+											<div className = "col-sm-4">
+												<label htmlFor="hora">Hora Inicio:</label>
 											</div>  
+											<div className ="col"> 
+												<input id="hora" type="time" className="form-control" 
+												 onChange={this.handleChange} name="hora_evento"></input>
+											</div>
+										</div>
 
-										</form>	
+										<hr></hr>
+
+										<div className = "row">
+											<div className ="col">
+												{
+	      											this.state.categorias.map((categoria, i) => {
+	      												return (
+														<div key={i} className="custom-control custom-checkbox">
+															<input default type="checkbox" className="custom-control-input" id={categoria.name+'new'}
+															 onChange={this.handleChange} name="categoria_evento" clave={categoria._id}></input>
+															<label className="custom-control-label" htmlFor={categoria.name+'new'}>{categoria.name}</label>
+														</div>
+	      												);
+	      											})
+	      										}
+											</div>
+										</div>  
+									</form>	
 									</div>
 									<div className="modal-footer lanzador-modal-footer">
 										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
 												onClick={this.closeModalMap.bind(this)} name="CrearEvent" />
 										<input type="submit" className="btn btn-danger" value="Crear"
-												onClick={this.closeModalMap.bind(this)} />
+												onClick={this.crearEvento.bind(this)} />
 									</div>
-								</form>
 							</div>
 						</div>
 					</div>
@@ -908,9 +952,7 @@ class Register extends Component {
 
 					</nav>
 				  	
-
-					  
-
+			
 					<div id="register-content" className={this.state.controlSidebar.content} >
 						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 							<div className="container-fluid">
@@ -938,9 +980,6 @@ class Register extends Component {
 					
 				</div>
 				
-
-
-
 				<Modal isOpen={this.state.modals.modalAsociar}
 					transparent={true}
 					animationType="fade"

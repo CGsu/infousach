@@ -137,18 +137,20 @@ class RegisterMap extends Component {
 			ordershigh: [],
 			onMarkerHigh: [],
 			orderslow: [],
-			onMarkerLow: []
+			onMarkerLow: [],
+			categorias: []
 		};
-		this.closeModalMap = this.closeModalMap.bind(this);
-		this.onMapClick = this.onMapClick.bind(this);
-		this.onPopupClick = this.onPopupClick.bind(this);
 		this.cargaSectores = this.cargaSectores.bind(this);
 		this.cargaTipoUbicaciones = this.cargaTipoUbicaciones.bind(this);
 		this.getTipoUbicaciones = this.getTipoUbicaciones.bind(this);
-		this.handleChange = this.handleChange.bind(this);
 		this.cargaOrderHigh = this.cargaOrderHigh.bind(this);
 		this.cargaOrderLow = this.cargaOrderLow.bind(this);
+		this.cargaCategorias = this.cargaCategorias.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 		this.getIcon = this.getIcon.bind(this);
+		this.closeModalMap = this.closeModalMap.bind(this);
+		this.onMapClick = this.onMapClick.bind(this);
+		this.onPopupClick = this.onPopupClick.bind(this);
 	}
 
 	componentWillMount() {
@@ -156,6 +158,7 @@ class RegisterMap extends Component {
 		this.cargaTipoUbicaciones();
 		this.cargaOrderHigh();
 		this.cargaOrderLow();
+		this.cargaCategorias();
 		console.log("Will mount: cuantas veces ingresa!");
 	}
 
@@ -169,13 +172,6 @@ class RegisterMap extends Component {
 			this.setState({sectores: result.sectores});
 		})
 		.catch(err => console.log(err));
-	}
-
-	handleChange(e) {
-		const { name, value } = e.target;
-		this.setState({
-			[name]: value
-		});
 	}
 
 	cargaOrderHigh() {
@@ -222,6 +218,26 @@ class RegisterMap extends Component {
 			this.setState({tipolocation: result.Ubicaciones});
 		})
 		.catch(err => console.log(err));
+	}
+
+	cargaCategorias() {
+		let url = Auth.domain + "/categorias"
+		let options = { method: "GET"};
+		Auth.fetch(url, options)
+		.then(result => {
+			console.log(result.Categorias);
+			this.setState({
+				categorias: result.Categorias
+			});
+		})
+		.catch(err => console.log(err));
+	}
+
+	handleChange(e) {
+		const { name, value } = e.target;
+		this.setState({
+			[name]: value
+		});
 	}
 
 	onMapClick(e) {
@@ -520,7 +536,7 @@ class Register extends Component {
       								</h5>
     							</div>
 
-    							<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+    							<div id="collapseFour" className="collapse" aria-labelledby="headingFour" data-parent="#accordion">
       								<div className="card-body">
        									Aqui vendria una lista de eventos Creados
       								</div>

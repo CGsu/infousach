@@ -507,7 +507,62 @@ class Register extends Component {
 
 							    <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
       								<div className="card-body">
-        								Aqui pondriamos filtros
+									    <div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="asamblea"></input>
+											<label className="custom-control-label" for="asamblea">Asamblea</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="charla"></input>
+											<label className="custom-control-label" for="charla">Charla</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="ciencias"></input>
+											<label className="custom-control-label" for="ciencias">Ciencias</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="concierto"></input>
+											<label className="custom-control-label" for="concierto">Concierto</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="cultura"></input>
+											<label className="custom-control-label" for="cultura">Cultira</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="debate"></input>
+											<label className="custom-control-label" for="debate">Debate</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="deporte"></input>
+											<label className="custom-control-label" for="deporte">Deporte</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="feria"></input>
+											<label className="custom-control-label" for="feria">Feria Laboral</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="fiesta"></input>
+											<label className="custom-control-label" for="fiesta">Fiesta</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="ocio"></input>
+											<label className="custom-control-label" for="ocio">Ocio</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="politica"></input>
+											<label className="custom-control-label" for="politica">Politica</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="salud"></input>
+											<label className="custom-control-label" for="salud">Salud</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="tecnologia"></input>
+											<label className="custom-control-label" for="tecnologia">Tecnologia</label>
+										</div>
+										<div className="custom-control custom-checkbox">
+											<input type="checkbox" className="custom-control-input" id="tocata"></input>
+											<label className="custom-control-label" for="tocata">Tocata</label>
+										</div>
       								</div>
     							</div>
   							</div>

@@ -516,14 +516,29 @@ class Register extends Component {
     							<div className="card-header" id="headingTwo">
       								<h5 className="mb-0">
         								<button className="perfil menu-op register-btn-options admin-button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-										IM BIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIG
+										Proximos Eventos
         								</button>
       								</h5>
     							</div>
 
     							<div id="collapseTwo" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
-      								<div className="card-body">
-        								IM BIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIG
+      								<div className="card-body" id="eventos">
+											<div className="eventcard">
+												<div className="eventcard-header">
+												<h3>Nombre del evento</h3>
+												</div>
+												<div className="eventcard-body">
+													<li>Creador: EsteMen</li>
+													<li>Fecha: 14/01/2019</li>
+													<li>Ubicacion: Cite Camp</li>
+													<span className="popup-map-admin-launcher" >
+														Ver mas
+													</span>
+												</div>
+												<div className="eventcard-footer">
+													Aqui irian categorias y si es oficial o no
+												</div>
+											</div>
       								</div>
     							</div>
   							</div>
@@ -575,7 +590,7 @@ class Register extends Component {
 								<div className="collapse navbar-collapse">
 									<ul className="nav navbar-nav ml-auto">
 										<li className="nav-item">
-		                                	<span className="nav-link admin-span" onClick={this.handleLogout.bind(this)}>Cerrar Sesión</span>
+		                                	<span className="nav-link register-span" onClick={this.handleLogout.bind(this)}>Cerrar Sesión</span>
 		                            	</li>
 									</ul>
 								</div>

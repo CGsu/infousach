@@ -9,6 +9,7 @@ import {
 import Modal from "react-modal";
 import AuthService from './../authorization/AuthService';
 import withAuth from './../authorization/withAuth';
+import "./register-map.css";
 import "./register.css";
 const Auth = new AuthService();
 
@@ -125,6 +126,10 @@ class RegisterMap extends Component {
 				modalEliminarMap: false,
 				modalAsociar: false
       		},
+      		filter: {
+      			high: false,
+      			low: false
+      		},
 			sectores: [],
 			onSector: [true, true, true, true, true, true, true, true],
 			infoSector: {
@@ -151,6 +156,7 @@ class RegisterMap extends Component {
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onMapClick = this.onMapClick.bind(this);
 		this.onPopupClick = this.onPopupClick.bind(this);
+		this.onFilter = this.onFilter.bind(this);
 	}
 
 	componentWillMount() {
@@ -338,6 +344,15 @@ class RegisterMap extends Component {
 		return !op? iconDefaultOn : iconDefaultOff;
 	}
 
+	onFilter(e) {
+		const tipo = e.target.getAttribute("name");
+		if (tipo === "high") {
+			this.setState({ filter: {...this.state.filter, high: !this.state.filter.high } })
+		} else {
+			this.setState({ filter: {...this.state.filter, low: !this.state.filter.low } })
+		}
+	}
+
 	render() {
 		const position = [this.state.location.lat, this.state.location.lng];
 		return (
@@ -365,6 +380,8 @@ class RegisterMap extends Component {
 	        			})
 	        		}
 	        		{
+	        			!this.state.filter.high ?
+	        			(
 	        			this.state.ordershigh.map((oh, i) => {
 	        				return (
 	        					<Marker key={oh._id} position={oh.geometria}
@@ -377,9 +394,11 @@ class RegisterMap extends Component {
 	        					</Marker>
 	        				)
 	        			})
-
+	        			) : ""
 	        		}
 	        		{
+	        			!this.state.filter.low ? 
+	        			(
 	        			this.state.orderslow.map((ol, i) => {
 	        				return (
 	        					<Marker key={ol._id} position={ol.geometria} 
@@ -394,10 +413,11 @@ class RegisterMap extends Component {
 	        					</Marker>
 	        				)
 	        			})
+	        			) : ""
 	        		}
 	      		</Map>
 
-	      		<div className="control-sector-admin">
+	      		<div className="control-sector-register">
 	      			<h4>Sectores USACH</h4>
 	      			{
 	      				this.state.infoSector.state ? 
@@ -405,6 +425,25 @@ class RegisterMap extends Component {
 	      					"Posicionese sobre un sector"
 	      			}
 	      		</div>	
+
+	      		<div className="control-ubicacion-register">
+	      			<h4>Filtro Ubicaciones</h4>
+	      			<hr/>
+	      			<span className="control-map-admin-opt" name="high"
+	        			style={this.state.filter.high ? btnMapStyles : {} }
+	        			onClick={this.onFilter.bind(this)}
+	        		>
+	        			Quitar tipo 1
+	        		</span>
+	        		<br/>
+	        		<span className="control-map-admin-opt" name="low"
+	        			style={this.state.filter.low ? btnMapStyles : {} }
+	        			onClick={this.onFilter.bind(this)}
+	        		>
+	        			Quitar tipo 2
+	        		</span>
+	      		</div>	
+
         	</div>
 		);
 	}
@@ -434,6 +473,7 @@ class Register extends Component {
 
 		};
 		this.closeModalMap = this.closeModalMap.bind(this);
+		this.onDetalle = this.onDetalle.bind(this);
 	}
 
 	componentWillMount() {
@@ -466,14 +506,26 @@ class Register extends Component {
 		}
 	}
 
+	onDetalle() {
+		this.setState({
+			modals: {
+				modalAsociar: true
+			}
+		});
+	}
+
   	changeSideNavBar() {
-  		console.log(this.state.usuario);
   		let arg = "active";
   		let msgBtn = "Mostrar Menú";
   		if (this.state.controlSidebar.sideNavBar === "active") {
   			arg = "";
   			msgBtn = "Ocultar Menú";
-  			this.state.controlSidebar.sideNavBar = "";
+  			this.setState({
+  				controlSidebar: {
+  					...this.controlSidebar,
+  					sideNavBar: ""
+  				}
+  			})
   		}
   		this.setState({
   			controlSidebar: {
@@ -482,11 +534,6 @@ class Register extends Component {
   				menuActivo: msgBtn
   			}
   		});
-  		this.setState({
-  			modals: {
-  				modalAsociar: true
-  			}
-  		})
   	}
 
 	render() {
@@ -533,9 +580,12 @@ class Register extends Component {
 													<li>Creador: EsteMen</li>
 													<li>Fecha: 14/01/2019</li>
 													<li>Ubicacion: Cite Camp</li>
-													<span className="popup-map-admin-launcher" >
-														Ver mas
-													</span>
+													<div className="btn-evento-register">
+														<span className="popup-map-admin-launcher"
+														 onClick={this.onDetalle.bind(this)}>
+															Ver mas
+														</span>
+													</div>
 												</div>
 												<div className="eventcard-footer">
 													Aqui irian categorias y si es oficial o no

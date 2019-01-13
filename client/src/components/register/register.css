@@ -7,7 +7,6 @@
     background-color: whitesmoke;
     color: black;
 }
-
 .card-header:hover{
     color: #7386D5;
     background: #fff;
@@ -135,35 +134,42 @@
     padding-left: 0;
     padding-right: 0;
 }
-
 .register-span {
     cursor: pointer;
 }
-
 .eventcard{
     overflow-y: hidden;
     border-radius: 5px 5px 5px 5px;
     border: 2px solid rgba(0, 0, 0, 0.125);
 }
-
+/*#D1D5DE*/
 .eventcard-header{
-    background: #D1D5DE;
+    background: #002F6C;
+    text-align: center;
+    padding: 0 1px;
+    opacity: 0.9;
+    color: white;
 }
-
+/*whitesmoke*/
 .eventcard-body{
     background-color: whitesmoke;
     color: black;
 }
-
+/*#B7B6C2*/
 .eventcard-footer{
-    background-color: #B7B6C2;
-    color: black;
+    background-color: #EA7600;
+    color: white;
+    padding: 1px;
 }
-
-
 #eventos{
     padding-left: 1%;
     padding-right: 1%;
     padding-top: 2%;
     padding-bottom: 2%;
+}
+.btn-evento-register {
+    text-align: right;
+}
+.btn-evento-register span {
+    margin-left: 4px;
 }

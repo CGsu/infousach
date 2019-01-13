@@ -6,3 +6,4 @@
 {"_id":{"$oid":"5c3684ec3b738c0e5021f7e3"},"descripcion":"espacio público abierto.","nombre":"plaza","orden":1,"__v":0}
 {"_id":{"$oid":"5c36852d3b738c0e5021f7e4"},"descripcion":"lugar para actividades higiénicas.","nombre":"baño","orden":1,"__v":0}
 {"_id":{"$oid":"5c3685583b738c0e5021f7e5"},"descripcion":"recinto cerrado destinado a un trabajo","nombre":"oficina","orden":1,"__v":0}
+{"_id":{"$oid":"5c3a3d3bc021a62b189682b9"},"descripcion":"edificio o local donde se conservan un conjunto de libros ordenados y clasificados para su consulta o préstamo bajo determinadas condiciones","nombre":"biblioteca","orden":1,"__v":0}

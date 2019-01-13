@@ -404,6 +404,7 @@ class Register extends Component {
 			userNombre: "",
 			userApellido: "",
 			userCorreo: "",
+			content: "active",
 			sideNavBar: "active",
 			mOpcion: "0", 
 			menuActivo: "Mostrar Menú"
@@ -435,6 +436,7 @@ class Register extends Component {
   			this.state.sideNavBar = "";
   		}
   		this.setState({
+			content: arg,
   			sideNavBar: arg,
   			menuActivo: msgBtn
   		});
@@ -530,7 +532,7 @@ class Register extends Component {
 
 					</nav>
 
-					<div id="register-content">
+					<div id="register-content" className={this.state.content} >
 						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 							<div className="container-fluid">
 								<button type="button" onClick={this.changeSideNavBar.bind(this)} className="btn btn-info">

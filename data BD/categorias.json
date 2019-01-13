@@ -1,0 +1,14 @@
+{"_id":{"$oid":"5c3ab08028c2b106f03ff28f"},"nombre":"concierto","__v":0}
+{"_id":{"$oid":"5c3ab08928c2b106f03ff290"},"nombre":"fiesta","__v":0}
+{"_id":{"$oid":"5c3ab08e28c2b106f03ff291"},"nombre":"ocio","__v":0}
+{"_id":{"$oid":"5c3ab09528c2b106f03ff292"},"nombre":"charla","__v":0}
+{"_id":{"$oid":"5c3ab09c28c2b106f03ff293"},"nombre":"politica","__v":0}
+{"_id":{"$oid":"5c3ab0a228c2b106f03ff294"},"nombre":"ciencias","__v":0}
+{"_id":{"$oid":"5c3ab0aa28c2b106f03ff295"},"nombre":"deporte","__v":0}
+{"_id":{"$oid":"5c3ab0b228c2b106f03ff296"},"nombre":"tecnología","__v":0}
+{"_id":{"$oid":"5c3ab0be28c2b106f03ff297"},"nombre":"salud","__v":0}
+{"_id":{"$oid":"5c3ab0c428c2b106f03ff298"},"nombre":"debate","__v":0}
+{"_id":{"$oid":"5c3ab0ca28c2b106f03ff299"},"nombre":"tocata","__v":0}
+{"_id":{"$oid":"5c3ab0d128c2b106f03ff29a"},"nombre":"asamblea","__v":0}
+{"_id":{"$oid":"5c3ab0d528c2b106f03ff29b"},"nombre":"cultura","__v":0}
+{"_id":{"$oid":"5c3ab0e828c2b106f03ff29c"},"nombre":"feria laboral","__v":0}

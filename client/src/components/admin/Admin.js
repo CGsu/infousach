@@ -5,7 +5,7 @@ import {
 	Marker, 
 	Popup, 
 	TileLayer, 
-	Polygon } from 'react-leaflet'
+	Polygon } from 'react-leaflet';
 import Modal from "react-modal";
 import AuthService from './../authorization/AuthService';
 import withAuth from './../authorization/withAuth';
@@ -14,6 +14,8 @@ import "./tabla.css";
 import "./modal.css";
 import "./panelBusqueda.css";
 import "./mapa.css";
+import "./popup.css";
+import imgPopup from "./popup-header.jpg";
 
 //---------------------------------------------------------------------------------
 //Variables de configuración y uso global.
@@ -462,7 +464,8 @@ class AdminMap extends Component {
       		modals: {
 				modalCrearMap: false,
 				modalModificarMap: false,
-				modalEliminarMap: false
+				modalEliminarMap: false,
+				modalAsociar: false
       		},
 			control: {
 				opcionCrear: false,
@@ -478,6 +481,11 @@ class AdminMap extends Component {
 				id: "",
 				state: false,
 				name: ""
+			},
+			asociar: {
+				activo: false,
+				idUbicacion: "",
+				dependencias: []
 			},
 			tipolocation: [],
 			lastCoordinates: [],
@@ -500,6 +508,10 @@ class AdminMap extends Component {
 		this.getIcon = this.getIcon.bind(this);
 		this.onIconMouse = this.onIconMouse.bind(this);
 		this.outIconMouse = this.outIconMouse.bind(this);
+		this.onAsociarUbicacion = this.onAsociarUbicacion.bind(this);
+		this.onAsociarDependencia = this.onAsociarDependencia.bind(this);
+		this.onControlAsociar = this.onControlAsociar.bind(this);
+		this.crearAsociaciones = this.crearAsociaciones.bind(this);
 	}
 
 	componentWillMount() {
@@ -508,6 +520,18 @@ class AdminMap extends Component {
 		this.cargaOrderHigh();
 		this.cargaOrderLow();
 		console.log("Will mount: cuantas veces ingresa!");
+	}
+
+	cargaSectores() {
+		let url = Auth.domain + "/location/sector";
+		let options = {
+			method: "GET"
+		};	
+		Auth.fetch(url, options)
+		.then(result => {
+			this.setState({sectores: result.sectores});
+		})
+		.catch(err => console.log(err));
 	}
 
 	handleChange(e) {
@@ -522,7 +546,6 @@ class AdminMap extends Component {
 		let options = {
 			method: "GET"
 		};
-		
 		Auth.fetch(url, options)
 		.then(result => {
 			let a = [];
@@ -555,8 +578,7 @@ class AdminMap extends Component {
 		let url = Auth.domain + "/tipolocation";
 		let options = {
 			method: "GET"
-		};
-		
+		};	
 		Auth.fetch(url, options)
 		.then(result => {
 			this.setState({tipolocation: result.Ubicaciones});
@@ -623,6 +645,45 @@ class AdminMap extends Component {
 		}
 	}
 
+	crearAsociaciones(e) {
+		e.preventDefault();
+		const id = this.state.asociar.idUbicacion;
+		let url = Auth.domain + "/location/orderhigh/" + id;
+		const body = {
+			dependencias: this.state.asociar.dependencias
+		};
+		const options = {
+			method: "PATCH",
+			body: JSON.stringify(body)
+		};
+		Auth.fetch(url, options)
+		.then(result => {
+			const newLow = this.state.onMarkerLow;
+			for(let i=0; i < newLow.length; i++) newLow[i] = false;
+			this.setState({onMarkerLow: newLow});
+
+			const newHigh = this.state.onMarkerHigh;
+			for(let i=0; i < newHigh.length; i++) newHigh[i] = false;
+			this.setState({onMarkerHigh: newHigh});
+
+			this.setState({
+				asociar: {
+					activo: false,
+					dependencias: [],
+					idUbicacion: ""
+				}
+			})
+		})
+		.catch(err => console.log(err))
+
+		this.setState({
+			modals: {
+				...this.state.modals,
+				modalAsociar: false
+			}
+		});
+	}
+
 	onMapClick(e) {
 		if (this.state.control.opcionCrear) {
 			this.setState({
@@ -642,29 +703,7 @@ class AdminMap extends Component {
 				control: {
 					...this.state.control,
 					opcionCrear: !this.state.control.opcionCrear,
-					opcionActualizar: false,
-					opcionEliminar: false,
 					popupBtn: false
-				}
-			})
-		} else if (op === "update") {
-			this.setState({
-				control: {
-					...this.state.control,
-					opcionCrear: false,
-					opcionActualizar: !this.state.control.opcionActualizar,
-					opcionEliminar: false,
-					popupBtn: true
-				}
-			})
-		} else if (op === "borrar") {
-			this.setState({
-				control: {
-					...this.state.control,
-					opcionCrear: false,
-					opcionActualizar: false,
-					opcionEliminar: !this.state.control.opcionEliminar,
-					popupBtn: true
 				}
 			})
 		} else if (op === "high") {
@@ -708,6 +747,14 @@ class AdminMap extends Component {
 				}
 			});
 		}
+		else if (nameModal === "asociar") {
+			this.setState({
+				modals: {
+					...this.state.modals,
+					modalAsociar: false
+				}
+			});
+		}
 	}
 
 	onPopupClick(e) {
@@ -726,19 +773,6 @@ class AdminMap extends Component {
 				}
 			});
 		}
-	}
-
-	cargaSectores() {
-		let url = Auth.domain + "/location/sector";
-		let options = {
-			method: "GET"
-		};
-		
-		Auth.fetch(url, options)
-		.then(result => {
-			this.setState({sectores: result.sectores});
-		})
-		.catch(err => console.log(err));
 	}
 
 	onSector(e) {
@@ -786,36 +820,107 @@ class AdminMap extends Component {
 	}
 
 	onIconMouse(e) {
-		e.target.openPopup();
-		const num_sector = e.target.options.name;
-		const value = e.target.options.value;
-		if (value === "high") {
-			const newOnSector = this.state.onMarkerHigh;
-			newOnSector[num_sector] = true;
-			this.setState({onMarkerHigh: newOnSector});
-		} else  {
-			const newOnSector = this.state.onMarkerLow;
-			newOnSector[num_sector] = true;
-			this.setState({onMarkerLow: newOnSector});
+		if(!this.state.asociar.activo) {
+			e.target.openPopup();
+			const num_sector = e.target.options.name;
+			const value = e.target.options.value;
+			if (value === "high") {
+				const newOnSector = this.state.onMarkerHigh;
+				newOnSector[num_sector] = true;
+				this.setState({onMarkerHigh: newOnSector});
+			} else  {
+				const newOnSector = this.state.onMarkerLow;
+				newOnSector[num_sector] = true;
+				this.setState({onMarkerLow: newOnSector});
+			}	
 		}
 	}
 
 	outIconMouse(e) {
-		e.target.closePopup();
-		const num_sector = e.target.options.name;
-		const value = e.target.options.value;
-		if (value === "high") {
+		if(!this.state.asociar.activo) {
+			e.target.closePopup();
+			const num_sector = e.target.options.name;
+			const value = e.target.options.value;
+			if (value === "high") {
+				const newOnSector = this.state.onMarkerHigh;
+				newOnSector[num_sector] = false;
+				this.setState({onMarkerHigh: newOnSector});
+			} else  {
+				const newOnSector = this.state.onMarkerLow;
+				newOnSector[num_sector] = false;
+				this.setState({onMarkerLow: newOnSector});
+			}
+		}
+	}
+
+	onAsociarUbicacion(e) {
+		const id = e.target.getAttribute("id");
+		if (!this.state.asociar.activo || id !== this.state.asociar.idUbicacion) {
+			const newHigh = this.state.onMarkerHigh;
+			for(let i=0; i < newHigh.length; i++) newHigh[i] = false;
+			this.setState({onMarkerHigh: newHigh});
+			const num_sector = e.target.getAttribute("name");
+			const newOnSector = this.state.onMarkerHigh;
+			newOnSector[num_sector] = true;
+			this.setState({
+				asociar: {
+					...this.state.asociar,
+					activo: true,
+					idUbicacion: id
+				}
+			});
+		} else {
+			const num_sector = e.target.getAttribute("name");
 			const newOnSector = this.state.onMarkerHigh;
 			newOnSector[num_sector] = false;
-			this.setState({onMarkerHigh: newOnSector});
-		} else  {
+			const newLow = this.state.onMarkerLow;
+			for(let i=0; i < newLow.length; i++) newLow[i] = false;
+			this.setState({
+				asociar: {
+					dependencias: [],
+					activo: false,
+					idUbicacion: ""
+				}
+			});
+			this.setState({onMarkerLow: newLow});
+		}
+	}
+
+	onAsociarDependencia(e) {
+		if (this.state.asociar.activo) {
+			e.target.closePopup();
+			const num_sector = e.target.options.name;
+			const id = e.target.options.id;
 			const newOnSector = this.state.onMarkerLow;
-			newOnSector[num_sector] = false;
+			const newDependencias = this.state.asociar.dependencias;
+			if (newOnSector[num_sector]) {
+				const index = newDependencias.indexOf(id);
+				if (index > -1) newDependencias.splice(index, 1);
+			} else {
+				if (!newDependencias.includes(id)) newDependencias.push(id);
+			}
+			this.setState({
+				asociar: {
+					...this.state.asociar,
+					dependencias: newDependencias,
+					activo: this.state.asociar.activo
+				}
+			});
+			newOnSector[num_sector] = !newOnSector[num_sector];
 			this.setState({onMarkerLow: newOnSector});
 		}
 	}
 
-
+	onControlAsociar() {
+		if (this.state.asociar.activo) {
+			this.setState({
+				modals: {
+					...this.state.modals,
+					modalAsociar: true
+				}
+			})	
+		}
+	}
 
 	render() {
 		const position = [this.state.location.lat, this.state.location.lng];
@@ -849,27 +954,34 @@ class AdminMap extends Component {
 	        			this.state.ordershigh.map((oh, i) => {
 	        				return (
 	        					<Marker key={oh._id} position={oh.geometria}
-	        						icon={this.getIcon(oh.tipo, this.state.onMarkerHigh[i])} 
-	        						onMouseOver={this.onIconMouse.bind(this)} 
-	        						onMouseOut={this.outIconMouse.bind(this)} 
+	        						icon={this.getIcon(oh.tipo, this.state.onMarkerHigh[i])}	
 	        						name={i} value={"high"}
 	        					>
 	        					<Popup>
-	        						<h1>{oh.nombre}</h1> <br/>
-	        						<p>{oh.descripcion}</p>
-	        						<br />
-	          						{
-	          							this.state.control.popupBtn ?
-	          							(
-			          						<p className="popup-map-admin-content">
-			          							<span className="popup-map-admin-launcher"
-			          					 		onClick={this.onPopupClick.bind(this)}>
-			          					 		ok
-			          							</span>
-			          						</p>	
-	          							)
-	          							: ""
-	          						}
+	        						<form>
+	        							<div>
+	        								<ul>
+	        									
+	        								</ul>
+	        								<div>
+	        									<p className="popup-map-admin-content">
+			          								<span className="popup-map-admin-launcher" 
+			          								  onClick={this.onAsociarUbicacion.bind(this)}
+			          								  style={this.state.asociar.activo ? btnMapStyles : {}}
+			          								  name={i} id={oh._id}
+			          								>
+			          					 			Asociar
+			          								</span>
+			          								<span className="popup-map-admin-launcher" >
+			          					 			Modificar
+			          								</span>
+			          								<span className="popup-map-admin-launcher" >
+			          					 			Eliminar
+			          								</span>
+			          							</p>
+	        								</div>
+	        							</div>
+	        						</form>
 	        					</Popup>
 	        					</Marker>
 	        				)
@@ -885,11 +997,13 @@ class AdminMap extends Component {
 	        						icon={this.getIcon(ol.tipo, this.state.onMarkerLow[i])} 
 	        						onMouseOver={this.onIconMouse.bind(this)} 
 	        						onMouseOut={this.outIconMouse.bind(this)} 
-	        						name={i} value={"low"}
+	        						onClick={this.onAsociarDependencia.bind(this)}
+	        						name={i} value={"low"} id={ol._id}
 	        					>
 	        					<Popup>
 	        						<h1>{ol.nombre}</h1> <br/>
 	        						<p>{ol.descripcion}</p>
+	        						<p>{ol.tipo}</p>
 	        					</Popup>
 	        					</Marker>
 	        				)
@@ -938,26 +1052,20 @@ class AdminMap extends Component {
 	        					Crear Ubicación
 	        				</span>
 	        				<br/>
-	        				<span className="control-map-admin-opt" name="update"
-	        					onClick={this.controlOpcion.bind(this)}
-	        					style={this.state.control.opcionActualizar ? btnMapStyles : {} }
+	        				<span className="control-map-admin-opt" name="asociar"
+	        					onClick={this.onControlAsociar.bind(this)}
 	        					>
-	        					Modificar Ubicación
-	        				</span>
-	        				<br/>
-	        				<span className="control-map-admin-opt" name="borrar"
-	        					onClick={this.controlOpcion.bind(this)}
-	        					style={this.state.control.opcionEliminar ? btnMapStyles : {} }
-	        					>
-	        					Eliminar Ubicación
+	        					Asociar Ubicaciones
 	        				</span>
 	        				<br/>
 	        				<span><small className="control-map-admin-nota">Nota:</small></span>
 	        				<br/>
-	        				<span>&#8226; <small className="control-map-admin-msg">Click para activar o desactivar una opción.</small></span>
+	        				<span>&#8226; <small className="control-map-admin-msg">Click para activar o desactivar "Crear Ubicacion".</small></span>
 	        				<br/>
 	        				<span>&#8226; <small className="control-map-admin-msg">Activa una opción, interactúe con el mapa haciendo click
 	        					en él.</small></span>
+	        				<br/>
+	        				<span>&#8226; <small className="control-map-admin-msg">Para ocupar "asociar ubicaciones" recuerde tener habilitado asociar.</small></span>
 	        			</p>
 	        		</div>
 	        	</div>
@@ -1065,6 +1173,37 @@ class AdminMap extends Component {
 												onClick={this.closeModalMap.bind(this)} name="borrar" />
 										<input type="submit" className="btn btn-danger" value="Delete"
 											 />
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</Modal>
+				<Modal isOpen={this.state.modals.modalAsociar}
+					transparent={true}
+					animationType="fade"
+					style={customStyles}
+					>
+					<div className="lanzador-modal">
+						<div className="modal-dialog lanzador-modal-dialog">
+							<div className="modal-content lanzador-modal-content">
+								<form>
+									<div className="modal-header lanzador-modal-header">
+										<h4 className="modal-title lanzador-modal-title">Asociando Ubicaciones</h4>
+										<button type="button" className="close" data-dismiss="modal" name="asociar"
+											aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
+										&times;
+										</button>
+									</div>
+									<div className="modal-body lanzador-modal-body">
+												<p>¿Estas seguro de querer asociar estas Ubicación?</p>
+												<p className="text-warning"><small>Esta acción no se puede deshacer</small></p>  
+									</div>
+									<div className="modal-footer lanzador-modal-footer">
+										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
+												onClick={this.closeModalMap.bind(this)} name="asociar" />
+										<input type="submit" className="btn btn-danger" value="asociar"
+												onClick={this.crearAsociaciones.bind(this)} />
 									</div>
 								</form>
 							</div>

@@ -668,15 +668,76 @@ class Register extends Component {
 							<div className="modal-content lanzador-modal-content">
 								<form>
 									<div className="modal-header lanzador-modal-header">
-										<h4 className="modal-title lanzador-modal-title">Detalle Evento</h4>
+										<h4 className="modal-title lanzador-modal-title">Evento : Nombre</h4>
 										<button type="button" className="close" data-dismiss="modal" name="asociar"
 											aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
 										&times;
 										</button>
 									</div>
 									<div className="modal-body lanzador-modal-body">
-												<p>¿Estas seguro de querer asociar estas Ubicación?</p>
-												<p className="text-warning"><small>Esta acción no se puede deshacer</small></p>  
+											<div className = "row">
+												<div className = "col-sm-3">
+													Descripción:
+												</div>
+												<div className ="col"> 
+													Charla dada por estemen para aprender sobre diseño
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Ubicación:
+												</div>
+												<div className ="col"> 
+													Cite Camp
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Fecha:
+												</div>
+												<div className ="col"> 
+													13/01/2019
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Creador:
+												</div>
+												<div className ="col"> 
+													EsteMen
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Tipo:
+												</div>
+												<div className ="col"> 
+													Oficial
+												</div>
+											</div>
+
+											<hr></hr>
+
+											<div className = "row">
+												<div className = "col-sm-3">
+													Categorias:
+												</div>
+												<div className ="col"> 
+													Charla
+												</div>
+											</div>
 									</div>
 									<div className="modal-footer lanzador-modal-footer">
 										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"

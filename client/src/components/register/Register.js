@@ -420,7 +420,8 @@ class Register extends Component {
 				id: "",
 				nombre: "",
 				apellido: "",
-				correo: ""
+				correo: "",
+				evt_asociado: ""
 			},
 			controlSidebar: {
 				content: "active",
@@ -439,13 +440,13 @@ class Register extends Component {
 		const profile = Auth.getProfile();
 		this.setState({
 			usuario: {
-				id: profile.id,
+				id: profile._id,
 				nombre: profile.nombre,
 				apellido: profile.apellido,
-				correo: profile.correo
+				correo: profile.correo,
+				evt_asociado: profile.evento_asociado
 			}
 		});
-		console.log(profile);
 	}
 
 	handleLogout() {
@@ -466,6 +467,7 @@ class Register extends Component {
 	}
 
   	changeSideNavBar() {
+  		console.log(this.state.usuario);
   		let arg = "active";
   		let msgBtn = "Mostrar Menú";
   		if (this.state.controlSidebar.sideNavBar === "active") {
@@ -493,7 +495,7 @@ class Register extends Component {
 				<div className="wraper register-wrapper">
 					<nav id="register-sidebar" className={this.state.controlSidebar.sideNavBar} >
 						<div className="sidebar-header register-sidebar-header">
-							<h3>Panel de Eventos InfoUsach</h3>
+							<h3>Bienvenid@ {this.state.usuario.nombre + " " + this.state.usuario.apellido}</h3>
 						</div>
 						<div id="accordion">
   							<div className="card">

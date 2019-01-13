@@ -73,9 +73,9 @@ exports.create_user = (req, res, next) => {
 					else {
 						const user = new User({
 							_id: mongoose.Types.ObjectId(),
-							nombre: req.body.nombre.toLoweCase(),
-							apellido: req.body.apellido.toLoweCase(),
-							correo: req.body.correo.toLoweCase(),
+							nombre: req.body.nombre.toLowerCase(),
+							apellido: req.body.apellido.toLowerCase(),
+							correo: req.body.correo.toLowerCase(),
 							password: hash,
 							rol: tipouser._id,
 							evento_asociado: permiso

@@ -10,7 +10,7 @@ const userRoutes = require("./api/routes/user");
 const loginRoutes = require("./api/routes/login"); 
 const locationRoutes = require("./api/routes/ubicacion");
 const tipoLocationRoutes = require("./api/routes/tipoUbicacion");
-
+const categoriaRoutes = require("./api/routes/categoria");
 
 app.use(morgan("dev"));
 app.use(bodyparser.urlencoded({extended: false}));
@@ -41,6 +41,7 @@ app.use("/user", userRoutes);
 app.use("/login", loginRoutes);
 app.use("/location", locationRoutes);
 app.use("/tipolocation", tipoLocationRoutes);
+app.use("/categorias", categoriaRoutes);
 
 app.use((req, res, next) => {
 	const error = new Error("Not found");

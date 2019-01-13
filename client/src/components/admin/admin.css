@@ -1,21 +1,12 @@
 .admin-wrapper {
     display: flex !important; 
-    width: 100%;
-    /*align-items: stretch !important;*/
+    align-items: stretch !important;
 }
 #admin-sidebar {
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 999;
-    background: #7386D5;
-    color: #fff;
-    transition: all 0.3s;
-    overflow-y: auto;
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
 }
-
 #admin-sidebar.active {
     margin-left: -250px;
 }
@@ -94,16 +85,8 @@
     text-align: center;
 }
 #admin-content {
-    top: 0;
-    right: 0;
-    width: calc(100% - 250px);
-    position: absolute;   
+    width: 100vw;
 }
-
-#admin-content.active{
- width: 100%;
-}
-
 .admin-span {
     cursor: pointer;
 }

@@ -225,7 +225,6 @@ class RegisterMap extends Component {
 		let options = { method: "GET"};
 		Auth.fetch(url, options)
 		.then(result => {
-			console.log(result.Categorias);
 			this.setState({
 				categorias: result.Categorias
 			});
@@ -417,23 +416,34 @@ class Register extends Component {
 		super();
 		this.ambito = "/register";
 		this.state = {
-			userNombre: "",
-			userApellido: "",
-			userCorreo: "",
-			content: "active",
-			sideNavBar: "active",
-			mOpcion: "0", 
-			menuActivo: "Mostrar Menú"
+			usuario: {
+				id: "",
+				nombre: "",
+				apellido: "",
+				correo: ""
+			},
+			controlSidebar: {
+				content: "active",
+				sideNavBar: "active",
+				menuActivo: "Mostrar Menú"
+			},
+			modals: {
+				modalAsociar: false
+			}
+
 		};
-		this.changeOption = this.changeOption.bind(this);
+		this.closeModalMap = this.closeModalMap.bind(this);
 	}
 
 	componentWillMount() {
 		const profile = Auth.getProfile();
 		this.setState({
-			userNombre: profile.nombre,
-			userCorreo: profile.correo,
-			userApellido: profile.apellido
+			usuario: {
+				id: profile.id,
+				nombre: profile.nombre,
+				apellido: profile.apellido,
+				correo: profile.correo
+			}
 		});
 		console.log(profile);
 	}
@@ -443,38 +453,45 @@ class Register extends Component {
     	this.props.history.replace('/login');
   	}
 
+  	closeModalMap(e) {
+		const nameModal = e.target.getAttribute("name");
+		if (nameModal === "asociar") {
+			this.setState({
+				modals: {
+					...this.state.modals,
+					modalAsociar: false
+				}
+			});
+		}
+	}
+
   	changeSideNavBar() {
   		let arg = "active";
   		let msgBtn = "Mostrar Menú";
-  		if (this.state.sideNavBar === "active") {
+  		if (this.state.controlSidebar.sideNavBar === "active") {
   			arg = "";
   			msgBtn = "Ocultar Menú";
-  			this.state.sideNavBar = "";
+  			this.state.controlSidebar.sideNavBar = "";
   		}
   		this.setState({
-			content: arg,
-  			sideNavBar: arg,
-  			menuActivo: msgBtn
+  			controlSidebar: {
+  				content: arg,
+  				sideNavBar: arg,
+  				menuActivo: msgBtn
+  			}
   		});
-  	}
-
-  	renderOption() {
-  		if (this.state.mOpcion === "0") {
-  			return (<h1>Bienvenido</h1>);
-  		}
-  	}
-
-  	changeOption(e) {
   		this.setState({
-  			mOpcion: e.target.name
-  		});
+  			modals: {
+  				modalAsociar: true
+  			}
+  		})
   	}
 
 	render() {
 		return (
 			<div className="register-body">
 				<div className="wraper register-wrapper">
-					<nav id="register-sidebar" className={this.state.sideNavBar} >
+					<nav id="register-sidebar" className={this.state.controlSidebar.sideNavBar} >
 						<div className="sidebar-header register-sidebar-header">
 							<h3>Panel de Eventos InfoUsach</h3>
 						</div>
@@ -548,12 +565,12 @@ class Register extends Component {
 
 					</nav>
 
-					<div id="register-content" className={this.state.content} >
+					<div id="register-content" className={this.state.controlSidebar.content} >
 						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 							<div className="container-fluid">
 								<button type="button" onClick={this.changeSideNavBar.bind(this)} className="btn btn-info">
 									<i className="fas fa-align-left"></i>
-		                			<span>{this.state.menuActivo}</span>
+		                			<span>{this.state.controlSidebar.menuActivo}</span>
 								</button>
 								<div className="collapse navbar-collapse">
 									<ul className="nav navbar-nav ml-auto">
@@ -571,6 +588,37 @@ class Register extends Component {
 						</div>
 					</div>
 				</div>
+				<Modal isOpen={this.state.modals.modalAsociar}
+					transparent={true}
+					animationType="fade"
+					style={customStyles}
+					>
+					<div className="lanzador-modal">
+						<div className="modal-dialog lanzador-modal-dialog">
+							<div className="modal-content lanzador-modal-content">
+								<form>
+									<div className="modal-header lanzador-modal-header">
+										<h4 className="modal-title lanzador-modal-title">Detalle Evento</h4>
+										<button type="button" className="close" data-dismiss="modal" name="asociar"
+											aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
+										&times;
+										</button>
+									</div>
+									<div className="modal-body lanzador-modal-body">
+												<p>¿Estas seguro de querer asociar estas Ubicación?</p>
+												<p className="text-warning"><small>Esta acción no se puede deshacer</small></p>  
+									</div>
+									<div className="modal-footer lanzador-modal-footer">
+										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
+												onClick={this.closeModalMap.bind(this)} name="asociar" />
+										<input type="submit" className="btn btn-danger" value="asociar"
+												onClick={this.closeModalMap.bind(this)} />
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</Modal>
 			</div>
 		);
 	}

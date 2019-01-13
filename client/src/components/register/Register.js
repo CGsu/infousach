@@ -421,8 +421,8 @@ class Register extends Component {
 		console.log(profile);
 	}
 
-	handleLogout(){
-    	Auth.logout()
+	handleLogout() {
+    	Auth.logout();
     	this.props.history.replace('/login');
   	}
 
@@ -443,6 +443,7 @@ class Register extends Component {
   	renderOption() {
   		if (this.state.mOpcion === "0") {
   			return (<h1>Bienvenido</h1>);
+  		}
   	}
 
   	changeOption(e) {

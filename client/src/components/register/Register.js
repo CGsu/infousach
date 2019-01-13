@@ -10,7 +10,6 @@ import Modal from "react-modal";
 import AuthService from './../authorization/AuthService';
 import withAuth from './../authorization/withAuth';
 import "./register.css";
-import "./acordeon-register.css";
 const Auth = new AuthService();
 
 const customStyles = {

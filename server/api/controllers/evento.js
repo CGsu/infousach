@@ -7,10 +7,13 @@ const Categoria = require("./../models/categoria");
 // Devuelve todos los eventos con estado activo
 exports.get_event_enabled = (req, res, next) => {
 	Evento.find({estado: true}, null, {sort: {fecha: 1} })
+	.populate("categoria")
+	.populate("creador")
+	.populate("ubicacion")
 	.then(docs => {
 		const respuesta = {
 			count: docs.length,
-			locations: docs.map(doc => {
+			Eventos: docs.map(doc => {
 				return {
 					id: result._id,
 					nombre: result.nombre,

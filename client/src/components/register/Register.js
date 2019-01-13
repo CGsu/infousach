@@ -152,6 +152,8 @@ class RegisterMap extends Component {
 		this.cargaOrderHigh = this.cargaOrderHigh.bind(this);
 		this.cargaOrderLow = this.cargaOrderLow.bind(this);
 		this.cargaCategorias = this.cargaCategorias.bind(this);
+		this.crearEvento = this.crearEvento.bind(this);
+		this.cargarEventos = this.cargarEventos.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.getIcon = this.getIcon.bind(this);
 		this.closeModalMap = this.closeModalMap.bind(this);
@@ -166,6 +168,7 @@ class RegisterMap extends Component {
 		this.cargaOrderHigh();
 		this.cargaOrderLow();
 		this.cargaCategorias();
+		this.cargarEventos();
 	}
 
 	handleLangChange () { 
@@ -234,7 +237,7 @@ class RegisterMap extends Component {
 	}
 
 	cargaCategorias() {
-		let url = Auth.domain + "/categorias"
+		let url = Auth.domain + "/categorias";
 		let options = { method: "GET"};
 		Auth.fetch(url, options)
 		.then(result => {
@@ -242,6 +245,32 @@ class RegisterMap extends Component {
 			this.setState({
 				categorias: result.Categorias
 			});
+		})
+		.catch(err => console.log(err));
+	}
+
+	cargarEventos() {
+		let url = Auth.domain + "/evento";
+		let options = { method: "GET" };
+		Auth.fetch(url, options)
+		.then(result => {
+			this.props.onGetEventos(result);
+			this.setState({
+				eventos: result.Eventos
+			});
+		})
+		.catch(err => console.log(err));
+	}
+
+	crearEvento() {
+		let url = Auth.domain + "/evento";
+		let options = {
+			method: "POST",
+			body: {}
+		};
+		Auth.fetch(url, options)
+		.then(result => {
+			console.log(result);
 		})
 		.catch(err => console.log(err));
 	}
@@ -477,8 +506,10 @@ class Register extends Component {
 			modals: {
 				modalAsociar: false
 			},
-			categorias: []
-
+			categorias: [],
+			auxCategorias: [],
+			eventos: [],
+			auxEventos: []
 		};
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onDetalle = this.onDetalle.bind(this);
@@ -504,8 +535,11 @@ class Register extends Component {
   	}
 
   	cargaCategorias(data) {
-  		console.log(data);
   		this.setState({categorias: data.Categorias});
+  	}
+
+  	cargarEventos(data) {
+  		this.setState({eventos: data.Eventos});
   	}
 
   	closeModalMap(e) {
@@ -682,7 +716,8 @@ class Register extends Component {
 						<div id="register-content-option" className="container-fluid container-options d-flex justify-content-center
 							align-items-start wraper board-work">
 							<RegisterMap usuario={this.state.usuario}
-							 onGetCategorias={this.cargaCategorias.bind(this)} />	
+							 onGetCategorias={this.cargaCategorias.bind(this)}
+							 onGetEventos={this.cargarEventos.bind(this)} />	
 						</div>
 					</div>
 				</div>

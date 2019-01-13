@@ -7,11 +7,12 @@ const eventoSchema = mongoose.Schema({
 	fecha: Date,
 	tipo: { type: String, required: true },
 	estado: { type: Boolean , default: true },
-	categoria: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Categoria",
-		required: true
-	},
+	categoria: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Categoria"
+		}
+	],
 	creador: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",

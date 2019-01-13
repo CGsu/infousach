@@ -451,16 +451,16 @@ class Register extends Component {
   		});
   	}
 
-	render() {
+render() {
 		return (
 			<div className="register-body">
-				<div className="wrapper register-wrapper">
-					<nav id="register-sidebar" className={this.state.sideNavBar}>
+				<div className="wraper register-wrapper">
+					<nav id="register-sidebar" className={this.state.sideNavBar} >
 						<div className="sidebar-header register-sidebar-header">
-							<h3>Panel del Register InfoUsach</h3>
+							<h3>Panel de Eventos InfoUsach</h3>
 						</div>
-						<div id="accordion"> 
-							<div className="card register-card-content">
+						<div id="accordion">
+  							<div className="card">
     							<div className="card-header" id="headingOne">
       								<h5 className="mb-0">
         								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -469,39 +469,86 @@ class Register extends Component {
       								</h5>
     							</div>
 
-							    <div id="collapseOne" className="collapse show register-card" aria-labelledby="headingOne" data-parent="#accordion">
+							    <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
       								<div className="card-body">
-        								iiiiiiiiiiiiiiiiiiiiiiiiiibbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-        								iiiiiiiiiiiiiiiiiiiiiiiiiibbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-        								iiiiiiiiiiiiiiiiiiiiiiiiiibbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-        								iiiiiiiiiiiiiiiiiiiiiiiiiibbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-        								iiiiiiiiiiiiiiiiiiiiiiiiiibbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-        								iiiiiiiiiiiiiiiiiiiiiiiiiibbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+        								Aqui pondriamos filtros
       								</div>
     							</div>
-							</div>
+  							</div>
+
+  							<div className="card">
+    							<div className="card-header" id="headingTwo">
+      								<h5 className="mb-0">
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+										IM BIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIG
+        								</button>
+      								</h5>
+    							</div>
+
+    							<div id="collapseTwo" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
+      								<div className="card-body">
+        								IM BIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIG
+      								</div>
+    							</div>
+  							</div>
+
+  							<div className="card">
+    							<div className="card-header" id="headingThree">
+      								<h5 className="mb-0">
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          									Registrados
+        								</button>
+      								</h5>
+    							</div>
+
+    							<div id="collapseThree" className="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+      								<div class="card-body">
+       									Aqui vendria una lista de eventos registrados?
+      								</div>
+    							</div>
+  							</div>
+
+							<div className="card">
+    							<div className="card-header" id="headingFour">
+      								<h5 className="mb-0">
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+          									Registrados
+        								</button>
+      								</h5>
+    							</div>
+
+    							<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+      								<div className="card-body">
+       									Aqui vendria una lista de eventos Creados
+      								</div>
+    							</div>
+  							</div>  
+
 						</div>
+						
+
 					</nav>
 
-					<div id="register-content">
+					<div id="admin-content">
 						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 							<div className="container-fluid">
 								<button type="button" onClick={this.changeSideNavBar.bind(this)} className="btn btn-info">
 									<i className="fas fa-align-left"></i>
-									<span>{this.state.menuActivo}</span>
+		                			<span>{this.state.menuActivo}</span>
 								</button>
 								<div className="collapse navbar-collapse">
 									<ul className="nav navbar-nav ml-auto">
 										<li className="nav-item">
-		                                	<span className="nav-link register-span" onClick={this.handleLogout.bind(this)}>Cerrar Sesión</span>
+		                                	<span className="nav-link admin-span" onClick={this.handleLogout.bind(this)}>Cerrar Sesión</span>
 		                            	</li>
 									</ul>
 								</div>
 							</div>
 						</nav>
 
-						<div id="register-content-option" className="container-fluid container-options d-flex justify-content-center align-items-start wraper board-work">
-							<RegisterMap />
+						<div id="admin-content-option" className="container-fluid container-options d-flex justify-content-center
+							align-items-start wraper board-work">
+							<RegisterMap />	
 						</div>
 					</div>
 				</div>

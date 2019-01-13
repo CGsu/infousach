@@ -1,11 +1,34 @@
+.card{
+    background-color: #7386D5;
+    overflow-y: hidden
+}
+
+.card-body{
+    background-color: whitesmoke;
+    color: black;
+}
+
+.card-header:hover{
+    color: #7386D5;
+    background: #fff;
+}
+.headingTwo {
+    overflow-y: scroll;
+    height: 300px;
+}
 .register-wrapper {
     display: flex !important; 
     align-items: stretch !important;
 }
 #register-sidebar {
+    z-index: 999;
+    position: fixed;
     min-width: 250px;
     max-width: 250px;
     min-height: 100vh;
+    overflow-y: auto;
+    top: 0;
+    bottom: 0;
 }
 #register-sidebar.active {
     margin-left: -250px;

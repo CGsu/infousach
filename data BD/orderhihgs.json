@@ -1,2 +1,0 @@
-{"_id":{"$oid":"5c36b5c59f5bab29c464cb61"},"geometria":[-33.44638378018747,-70.68324565887453],"count":0,"locations":[],"nombre":"citecamp","descripcion":"edificion ubicado en sector 7 ","tipo":{"$oid":"5c3684033b738c0e5021f7e0"},"__v":0}
-{"_id":{"$oid":"5c36b61c9f5bab29c464cb62"},"geometria":[-33.44639273234872,-70.68150758743288],"count":0,"locations":[],"nombre":"ingeniería mecánica","descripcion":"departamento de mecánica de la usach","tipo":{"$oid":"5c3683f43b738c0e5021f7df"},"__v":0}

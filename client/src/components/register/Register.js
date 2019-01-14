@@ -685,6 +685,11 @@ class Register extends Component {
 				sideNavBar: "active",
 				menuActivo: "Mostrar Menú"
 			},
+			controlSidebarRight:{
+				sideNavBar: "active",
+				overlay: "",
+				menuActivo: " Cerrar Menú"
+			},
 			modals: {
 				modalAsociar: false
 			},
@@ -758,8 +763,8 @@ class Register extends Component {
   				sideNavBar: arg,
   				menuActivo: msgBtn
   			}
-  		});
-  	}
+  		});  
+	}
 
   	handleRegisterMap(value) {
   		const op = value.opcion;
@@ -875,7 +880,61 @@ class Register extends Component {
 					</nav>
 				  	
 
-					  
+					<nav id="register-sidebar-right" className={this.state.controlSidebarRight.sideNavBar} >
+					
+						<div className="sidebar-header register-sidebar-right-header">
+							<div className="row">
+							    <div className = "col-sm-3">
+								
+									<button type="button" onClick={this.changeSideNavBar.bind(this)} className="btn btn-info">
+										<i className="fas fa-arrow-left"></i>
+										<span>{this.state.controlSidebarRight.menuActivo}</span>
+									</button>
+								</div>
+							</div>
+							<hr></hr>
+							<div className ="row">
+								<div className = "col">
+									<h5>Eventos en .....</h5>
+								</div>	
+							</div>
+							<hr></hr>
+							<div className="card">
+    							<div className="basiccard-header" id="ubieventos">
+      								<h5 className="mb-0">
+										Buscador?
+      								</h5>
+    							</div>
+
+    							
+      							<div className="card-body" id="eventos">
+
+									<div className="eventcard">
+										<div className="eventcard-header">
+											<h3>Nombre del evento</h3>
+										</div>
+										<div className="eventcard-body">
+											<li>Creador: EsteMen</li>
+											<li>Fecha: 14/01/2019</li>
+											<li>Ubicacion: Cite Camp</li>
+											<div className="btn-evento-register">
+												<span className="popup-map-admin-launcher"
+												onClick={this.onDetalle.bind(this)}>
+													Ver mas
+												</span>
+											</div>
+										</div>
+										<div className="eventcard-footer">
+											Aqui irian categorias y si es oficial o no
+										</div>
+									</div>
+
+      							</div>
+    							
+  							</div>
+							
+						</div>
+					</nav>
 
 					<div id="register-content" className={this.state.controlSidebar.content} >
 						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -899,10 +958,12 @@ class Register extends Component {
 							<RegisterMap usuario={this.state.usuario}
 							 onGetCategorias={this.cargaCategorias.bind(this)} />	
 						</div>
+
+
 					</div>
 					
 				</div>
-				
+				<div id="overlayright" className={this.state.controlSidebarRight.overlay}></div>
 
 
 

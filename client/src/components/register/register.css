@@ -4,6 +4,11 @@
     overflow-y: hidden;
 }
 
+.basiccard{
+    background-color: #7386D5;
+    overflow-y: hidden;
+}
+
 .card-body{
     background-color: whitesmoke;
     color: black;
@@ -12,6 +17,7 @@
     color: #7386D5;
     background: #fff;
 }
+
 .register-wrapper {
     display: flex !important; 
     align-items: stretch !important;
@@ -25,6 +31,24 @@
     z-index: 999;
     overflow-y: auto;
 }
+
+#register-sidebar-right {
+    position: fixed;
+    z-index: 10001 !important;
+    top: 0;
+    right: 0;
+    overflow-y: auto;
+    width: 250px;
+    height: 100vh;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#register-sidebar-right.active {
+    margin-right: -250px;
+}
+
 #register-sidebar.active {
     margin-left: -250px;
 }
@@ -194,4 +218,24 @@
 }
 .form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
     display: none;   
+}
+
+#overlayright {
+    display: none;
+    position: fixed;
+    /* full screen */
+    width: 100vw;
+    height: 100vh;
+    /* transparent black */
+    background: rgba(0, 0, 0, 0.7);
+    /* middle layer, i.e. appears below the sidebar */
+    z-index: 1000;
+    opacity: 0;
+    /* animate the transition */
+    transition: all 0.5s ease-in-out;
+}
+
+#overlayright.active {
+    display: block;
+    opacity: 1;
 }

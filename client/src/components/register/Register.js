@@ -531,11 +531,12 @@ class RegisterMap extends Component {
 									<hr></hr>
 
 									<span className="popup-map-admin-launcher"
-										onClick={this.onCrear.bind(this)}>
+									 onClick={this.onCrear.bind(this)}>
 										Crear Evento
 									</span>
 
-									<span className="popup-map-admin-launcher">
+									<span className="popup-map-admin-launcher"
+									 onClick={this.props.onActiveSidebarRight}>
 										Ver Eventos
 									</span>
 
@@ -594,7 +595,8 @@ class RegisterMap extends Component {
 										Crear Evento
 									</span>
 
-									<span className="popup-map-admin-launcher">
+									<span className="popup-map-admin-launcher"
+									 onClick={this.props.onActiveSidebarRight}>
 										Ver Eventos
 									</span>
 
@@ -761,7 +763,7 @@ class Register extends Component {
 			controlSidebarRight:{
 				sideNavBar: "active",
 				overlay: "",
-				menuActivo: " Cerrar Menú"
+				menuActivo: "Cerrar Menú"
 			},
 			modals: {
 				modalAsociar: false
@@ -774,6 +776,7 @@ class Register extends Component {
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onDetalle = this.onDetalle.bind(this);
 		this.cargaCategorias = this.cargaCategorias.bind(this);
+		this.onActiveSidebarRight = this.onActiveSidebarRight.bind(this);
 	}
 
 	componentWillMount() {
@@ -842,6 +845,22 @@ class Register extends Component {
   				menuActivo: msgBtn
   			}
   		});  
+	}
+
+	onActiveSidebarRight() {
+		let onSideNavBar = "";
+		let onShadowBar = "active";
+		if (this.state.controlSidebarRight.sideNavBar === "") {
+			onSideNavBar = "active";
+			onShadowBar = "";
+		}
+		this.setState({
+			controlSidebarRight: {
+				...this.state.controlSidebarRight,
+				sideNavBar: onSideNavBar,
+				overlay: onShadowBar
+			}
+		})
 	}
 
   	handleRegisterMap(value) {
@@ -964,7 +983,7 @@ class Register extends Component {
 							<div className="row">
 							    <div className = "col-sm-3">
 								
-									<button type="button" onClick={this.changeSideNavBar.bind(this)} className="btn btn-info">
+									<button type="button" onClick={this.onActiveSidebarRight.bind(this)} className="btn btn-info">
 										<i className="fas fa-arrow-left"></i>
 										<span>{this.state.controlSidebarRight.menuActivo}</span>
 									</button>
@@ -1035,7 +1054,8 @@ class Register extends Component {
 							align-items-start wraper board-work">
 							<RegisterMap usuario={this.state.usuario}
 							 onGetCategorias={this.cargaCategorias.bind(this)}
-							 onGetEventos={this.cargarEventos.bind(this)} />	
+							 onGetEventos={this.cargarEventos.bind(this)} 
+							 onActiveSidebarRight={this.onActiveSidebarRight.bind(this)} />	
 						</div>
 
 

@@ -16,14 +16,15 @@ const Auth = new AuthService();
 
 const customStyles = {
   content : {
-    top                   : '50%',
+    top                   : '48%',
     left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
 	transform             : 'translate(-50%, -50%)',
-	height                :  '100vh',
+	height                :  '98vh',
     overflow              :  'scroll',
+    overflowX: "hidden",
     border: "none",
     background: "none"
   },
@@ -141,7 +142,8 @@ class RegisterMap extends Component {
 			},
 			newEvento: {
 				categorias: [], 
-				idUbicacion: ""
+				idUbicacion: "",
+				ordenUbicacion: ""
 			},
 			tipolocation: [],
 			lastCoordinates: [],
@@ -269,7 +271,7 @@ class RegisterMap extends Component {
 
 	crearEvento(e) {
 		const validator = Object.keys(this.state.newEvento).length;
-		if (validator === 6 && this.state.newEvento.length != 0) {
+		if (validator === 7 && this.state.newEvento.length != 0) {
 			let url = Auth.domain + "/evento";
 			const body = {
 				nombre: this.state.newEvento.nombre_evento,
@@ -280,7 +282,8 @@ class RegisterMap extends Component {
 				estado: true,
 				categoria: this.state.newEvento.categorias,
 				creador: this.state.usuario.id,
-				ubicacion: this.state.newEvento.idUbicacion
+				ubicacion: this.state.newEvento.idUbicacion,
+				ordenUbicacion: this.state.newEvento.ordenUbicacion
 			};
 			let options = {
 				method: "POST",
@@ -375,10 +378,12 @@ class RegisterMap extends Component {
 
 	onPopupClick(e) {
 		const idUbicacion = e.target.options.id;
+		const ordenUbicacion = e.target.options.value;
 		this.setState({
 			newEvento: {
 				...this.state.newEvento,
-				idUbicacion: idUbicacion
+				idUbicacion: idUbicacion,
+				ordenUbicacion: ordenUbicacion
 			}
 		})
 	}
@@ -553,6 +558,7 @@ class RegisterMap extends Component {
 	        				return (
 	        					<Marker key={ol._id} position={ol.geometria} 
 	        						icon={this.getIcon(ol.tipo, this.state.onMarkerLow[i])}
+	        						onClick={this.onPopupClick.bind(this)}
 	        						name={i} value={"low"} id={ol._id}
 	        					>
 	        					<Popup>
@@ -706,6 +712,9 @@ class RegisterMap extends Component {
 										<hr></hr>
 
 										<div className = "row">
+											<div className = "col-12">
+												<label>Categorias:</label>
+											</div> 
 											<div className ="col">
 												{
 	      											this.state.categorias.map((categoria, i) => {

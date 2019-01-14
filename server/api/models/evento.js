@@ -22,7 +22,8 @@ const eventoSchema = mongoose.Schema({
 	ubicacion: {
 		type: mongoose.Schema.Types.ObjectId,
 		required: true
-	}
+	},
+	ordenUbicacion: { type: String, required: true }
 });
 
 module.exports = mongoose.model("Evento", eventoSchema);

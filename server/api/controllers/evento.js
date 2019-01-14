@@ -23,7 +23,8 @@ exports.get_event_enabled = (req, res, next) => {
 					estado: doc.estado,
 					categoria: doc.categoria,
 					creador: doc.creador,
-					ubicacion: doc.ubicacion
+					ubicacion: doc.ubicacion,
+					ordenUbicacion: doc.ordenUbicacion
 				}
 			})
 		};
@@ -47,7 +48,8 @@ exports.insert_new_event = (req, res, next) => {
 		estado: req.body.estado,
 		categoria: req.body.categoria,
 		creador: req.body.creador,
-		ubicacion: req.body.ubicacion
+		ubicacion: req.body.ubicacion,
+		ordenUbicacion: req.body.ordenUbicacion
 	});
 	evento.save()
 	.then(result => {
@@ -63,7 +65,8 @@ exports.insert_new_event = (req, res, next) => {
 				estado: result.estado,
 				categoria: result.categoria,
 				creador: result.creador,
-				ubicacion: result.ubicacion
+				ubicacion: result.ubicacion,
+				ordenUbicacion: result.ordenUbicacion
 			}
 		});
 	})

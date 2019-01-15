@@ -1315,7 +1315,7 @@ class Admin extends Component {
 								<div className="collapse navbar-collapse">
 									<ul className="nav navbar-nav ml-auto">
 										<li className="nav-item">
-		                                	<span className="nav-link admin-span" onClick={this.handleLogout.bind(this)}>Cerrar Sesión</span>
+		                                	<span className="nav-link admin-span nav-text" onClick={this.handleLogout.bind(this)}>Cerrar Sesión</span>
 		                            	</li>
 									</ul>
 								</div>

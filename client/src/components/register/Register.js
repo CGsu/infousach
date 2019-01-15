@@ -1000,7 +1000,6 @@ class Register extends Component {
 					band: !open
 				}
 			});
-			console.log(this.state.proxEventos.eventos);
 		}
 	}
 

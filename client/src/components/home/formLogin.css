@@ -1,0 +1,74 @@
+.nav-home {
+	margin-bottom: 80px;
+}
+.main-form {
+	width: 380px;
+	margin: auto;
+}
+body {
+	background-color: #ccc;
+	font-family: 'Roboto', sans-serif;
+	background-size: cover;
+}
+.main-section {
+	margin: 0 auto;
+	margin-top: 50px;
+	padding: 0;
+}
+.modal-content {
+	background-color: white;
+	opacity: .8;
+	padding: 0 18px;
+	border-radius: 10px;
+}
+.user-img img{
+	width: 120px;
+	height: 120px;
+}
+
+.user-img {
+	margin-top: -50px;
+	margin-bottom: 35px;
+}
+.form-group {
+	margin-bottom: 25px;
+}
+.form-group input {
+	height: 42px;
+	border-radius: 5px;
+	font-size: 18px;
+	letter-spacing: 2px;
+	padding-left: 54px;
+}
+.ico-a::before {
+	position: absolute;
+	font-size: 22px;
+	left: 28px;
+	padding-top: 15px;
+	color: #555e60;
+}
+.ico-a::last-of-type::befor {
+	content: "\f023";
+}
+.form-input button {
+	width: 40%;
+	margin: 5px 0 25px;
+}
+.btn-success {
+	background-color: #1c6288;
+	font-size: 19px;
+	border-radius: 5px;
+	padding: 7px 14px;
+	border: 1px solid #daf1ff;
+}
+.btn-success:hover {
+	background-color: #13445e;
+	border: 1px solid #daf1ff;
+}
+.forgot {
+	padding: 5px 0 25px;
+}
+.forgot {
+	font-weight: bold;
+	color: #000;
+}

@@ -664,7 +664,7 @@ class RegisterMap extends Component {
 									</button>
 								</div>
 								<div className="modal-body lanzador-modal-body">
-									<form>
+									
 										<div className="form-group">
 											<div className = "row">
 												<div className = "col-sm-4">
@@ -735,7 +735,7 @@ class RegisterMap extends Component {
 	      										}
 											</div>
 										</div>  
-									</form>	
+									
 									</div>
 									<div className="modal-footer lanzador-modal-footer">
 										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
@@ -791,12 +791,16 @@ class Register extends Component {
 				eventos: [],
 				band: true
 			},
+			buscadorRight: {
+				busc: ""
+			},
 			categorias: [],
 			filtros: [],
 			whichFilter: [],
 			eventos: [],
-			eventBarRight: []
+			eventBarRight: [],
 		};
+		this.buscadorRight = this.buscadorRight.bind(this);
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onDetalle = this.onDetalle.bind(this);
 		this.cargaCategorias = this.cargaCategorias.bind(this);
@@ -806,6 +810,7 @@ class Register extends Component {
 		this.proxEventos = this.proxEventos.bind(this);
 		this.managerFilter = this.managerFilter.bind(this);
 		this.controlFilter = this.controlFilter.bind(this);
+		this.buscEventos = this.buscEventos.bind(this);
 	}
 
 	componentWillMount() {
@@ -1036,7 +1041,29 @@ class Register extends Component {
 								  : (temp.indexOf("evento no oficial") > -1 ? cond2 = true : cond2 = false); 
 
 		return cond1 && cond2;
-	}  
+	}
+	
+	buscEventos(evento){
+		let cond1 = true;
+		const busc = this.state.buscadorRight.busc.toLowerCase();
+		if (busc===""){
+			return cond1;
+		}else{
+			evento.nombre.toLowerCase().includes(busc)? cond1 = true 
+			: evento.nombre.toLowerCase().includes(busc)?cond1 = true :cond1 = false;
+		}
+		return cond1;
+	}
+
+	buscadorRight(e){
+		const { name, value } = e.target;
+		this.setState({
+			buscadorRight: {
+				...this.state.buscadorRight,
+				busc: value
+			}
+		});
+	}
 
 	render() {
 		return (
@@ -1089,107 +1116,7 @@ class Register extends Component {
       									this.state.proxEventos.eventos.map((event, i) => {
       										if (this.controlFilter(event)) {
       										return(
-			      								<div className="card-body" id="eventos" key={i}>
-													<div className="eventcard">
-														<div className="eventcard-header">
-														<h3>{event.nombre}</h3>
-														</div>
-														<div className="eventcard-body">
-															<li>Creador: {event.creador.nombre}</li>
-															<li>Fecha: {event.fecha}</li>
-															<li>Ubicacion: {event.nombreUbicacion}</li>
-															<div className="btn-evento-register">
-																<span className="popup-map-admin-launcher"
-																	onClick={this.onDetalle.bind(this)}
-																	id={event.id} name={"left"}>
-																	Ver mas
-																</span>
-															</div>
-														</div>
-														<div className="eventcard-footer">
-															Aqui irian categorias y si es oficial o no
-														</div>
-													</div>
-			      								</div>
-      										);
-      										}
-      									})
-      								}
-    							</div>
-  							</div>
-
-  							<div className="card">
-    							<div className="card-header" id="headingThree">
-      								<h5 className="mb-0">
-        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          									Subscripciones
-        								</button>
-      								</h5>
-    							</div>
-
-    							<div id="collapseThree" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
-      								registrados
-    							</div>
-  							</div>
-
-							<div className="card">
-    							<div className="card-header" id="headingFour">
-      								<h5 className="mb-0">
-        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"
-        								 onClick={this.misEventos.bind(this)}>
-          									Creados
-        								</button>
-      								</h5>
-    							</div>
-
-    							<div id="collapseFour" className="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-      								{
-      									this.state.misEventos.eventos.map((event, i) => {
-      										if (this.controlFilter(event)) {
-      										return(
-			      								<div className="card-body" id="eventos" key={i}>
-													<div className="eventcard">
-														<div className="eventcard-header">
-														<h3>{event.nombre}</h3>
-														</div>
-														<div className="eventcard-body">
-															<li>Creador: {event.creador.nombre}</li>
-															<li>Fecha: {event.fecha}</li>
-															<li>Ubicacion: {event.nombreUbicacion}</li>
-															<div className="btn-evento-register">
-																<span className="popup-map-admin-launcher"
-																	onClick={this.onDetalle.bind(this)}
-																	id={event.id} name={"left"}>
-																	Ver mas
-																</span>
-															</div>
-														</div>
-														<div className="eventcard-footer">
-															Aqui irian categorias y si es oficial o no
-														</div>
-													</div>
-			      								</div>
-      										);
-      										}
-      									})
-      								}
-    							</div>
-  							</div>  
-
-							  <div className="card">
-    							<div className="card-header" id="headingFive">
-      								<h5 className="mb-0">
-        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-          									Todos
-        								</button>
-      								</h5>
-    							</div>
-
-    							<div id="collapseFive" className="collapse" aria-labelledby="headingFive" data-parent="#accordion">
-      								{
-      									this.state.eventos.map((event, i) => {
-      										return(
-			      								<div className="card-body" id="eventos" key={i}>
+												<div className="card-body" id="eventos" key={i}>
 													<div className="eventcard" key={i}>
 														<div className="eventcard-header">
 															<h5>Evento : {event.nombre}</h5>
@@ -1230,50 +1157,45 @@ class Register extends Component {
 															</div>
 														</div>
 													</div>
-			      								</div>
+													<hr></hr>
+												</div>
       										);
+      										}
       									})
       								}
     							</div>
-  							</div>   
+  							</div>
 
-						</div>
-						
-
-					</nav>
-				  	
-
-					<nav id="register-sidebar-right" className={this.state.controlSidebarRight.sideNavBar} >
-					
-						<div className="sidebar-header register-sidebar-right-header">
-							<div className="row">
-							    <div className = "col-sm-3">
-								
-									<button type="button" onClick={this.onActiveSidebarRight.bind(this)} className="btn btn-info">
-										<i className="fas fa-arrow-left"></i>
-										<span>{this.state.controlSidebarRight.menuActivo}</span>
-									</button>
-								</div>
-							</div>
-							<hr></hr>
-							<div className ="row">
-								<div className = "col">
-									<h5>Eventos en {this.state.nombreUbicacion} </h5>
-								</div>	
-							</div>
-							<hr></hr>
-							<div className="card">
-    							<div className="basiccard-header" id="ubieventos">
+  							<div className="card">
+    							<div className="card-header" id="headingThree">
       								<h5 className="mb-0">
-										Buscador?
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          									Subscripciones
+        								</button>
       								</h5>
     							</div>
 
-    							
-      							<div className="card-body" id="eventos">
+    							<div id="collapseThree" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
+      								registrados
+    							</div>
+  							</div>
+
+							<div className="card">
+    							<div className="card-header" id="headingFour">
+      								<h5 className="mb-0">
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"
+        								 onClick={this.misEventos.bind(this)}>
+          									Creados
+        								</button>
+      								</h5>
+    							</div>
+
+    							<div id="collapseFour" className="collapse" aria-labelledby="headingFour" data-parent="#accordion">
       								{
-      									this.state.eventBarRight.map((event, i) => {
+      									this.state.misEventos.eventos.map((event, i) => {
+      										if (this.controlFilter(event)) {
       										return(
+												<div className="card-body" id="eventos" key={i}>
 												<div className="eventcard" key={i}>
 													<div className="eventcard-header">
 														<h5>Evento : {event.nombre}</h5>
@@ -1308,13 +1230,165 @@ class Register extends Component {
 														<div className="btn-evento-register">
 															<span className="popup-map-admin-launcher"
 															onClick={this.onDetalle.bind(this)}
-															id={event.id} name={"right"} >
+															id={event.id} name={"left"} >
 																Ver mas
 															</span>
 														</div>
 													</div>
 												</div>
+												<hr></hr>
+											</div>
       										);
+      										}
+      									})
+      								}
+    							</div>
+  							</div>  
+
+							  <div className="card">
+    							<div className="card-header" id="headingFive">
+      								<h5 className="mb-0">
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+          									Todos
+        								</button>
+      								</h5>
+    							</div>
+
+    							<div id="collapseFive" className="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+      								{
+      									this.state.eventos.map((event, i) => {
+											if (this.controlFilter(event)) {  
+												return(
+													<div className="card-body" id="eventos" key={i}>
+														<div className="eventcard" key={i}>
+															<div className="eventcard-header">
+																<h5>Evento : {event.nombre}</h5>
+															</div>
+															<div className="eventcard-body">
+																<div className="row">
+																	<div className="col-sm-5">
+																	Creador:
+																	</div>
+																	<div className="col">
+																		{event.creador.nombre + " " + event.creador.apellido}
+																	</div>
+																</div>
+																<hr></hr>
+																<div className="row">
+																	<div className="col-sm-5">
+																	Fecha:
+																	</div>
+																	<div className="col">
+																		{event.fecha}
+																	</div>
+																</div>
+																<hr></hr>
+																<div className="row">
+																	<div className="col-sm-5">
+																	Tipo:
+																	</div>
+																	<div className="col">
+																	{event.tipo.replace("_"," ")}
+																	</div>
+																</div>
+																<div className="btn-evento-register">
+																	<span className="popup-map-admin-launcher"
+																	onClick={this.onDetalle.bind(this)}
+																	id={event.id} name={"left"} >
+																		Ver mas
+																	</span>
+																</div>
+															</div>
+														</div>
+														<hr></hr>
+													</div>
+												);
+											}	
+      									})
+      								}
+    							</div>
+  							</div>   
+
+						</div>
+						
+
+					</nav>
+				  	
+
+					<nav id="register-sidebar-right" className={this.state.controlSidebarRight.sideNavBar} >
+					
+						<div className="sidebar-header register-sidebar-right-header">
+							<div className="row">
+							    <div className = "col-sm-3">
+								
+									<button type="button" onClick={this.onActiveSidebarRight.bind(this)} className="btn btn-info">
+										<i className="fas fa-arrow-left"></i>
+										<span>{this.state.controlSidebarRight.menuActivo}</span>
+									</button>
+								</div>
+							</div>
+							<hr></hr>
+							<div className ="row">
+								<div className = "col">
+									<h5>Eventos en {this.state.nombreUbicacion} </h5>
+								</div>	
+							</div>
+							<hr></hr>
+							<div className="card">
+    							<div className="basiccard-header" id="ubieventos">
+										<input type="text" className="form-control" id="b_evento" placeholder="Buscador(Nombre,Descripción)" 
+										onChange={this.buscadorRight} name="buscador"></input>
+									<hr></hr>
+    							</div>
+
+    							
+      							<div className="card-body" id="eventos">
+      								{
+      									this.state.eventBarRight.map((event, i) => {
+											if (this.buscEventos(event)) {  
+												return(
+													<div className="eventcard" key={i}>
+														<div className="eventcard-header">
+															<h5>Evento : {event.nombre}</h5>
+														</div>
+														<div className="eventcard-body">
+															<div className="row">
+																<div className="col-sm-5">
+																Creador:
+																</div>
+																<div className="col">
+																	{event.creador.nombre + " " + event.creador.apellido}
+																</div>
+															</div>
+															<hr></hr>
+															<div className="row">
+																<div className="col-sm-5">
+																Fecha:
+																</div>
+																<div className="col">
+																	{event.fecha}
+																</div>
+															</div>
+															<hr></hr>
+															<div className="row">
+																<div className="col-sm-5">
+																Tipo:
+																</div>
+																<div className="col">
+																{event.tipo.replace("_"," ")}
+																</div>
+															</div>
+															<div className="btn-evento-register">
+																<span className="popup-map-admin-launcher"
+																onClick={this.onDetalle.bind(this)}
+																id={event.id} name={"right"} >
+																	Ver mas
+																</span>
+															</div>
+														</div>
+													</div>
+												);
+											}	
       									})
       								}
       							</div>

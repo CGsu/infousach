@@ -1136,16 +1136,44 @@ class Register extends Component {
 							<div className="card">
     							<div className="card-header" id="headingFour">
       								<h5 className="mb-0">
-        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"
+        								 onClick={this.misEventos.bind(this)}>
           									Creados
         								</button>
       								</h5>
     							</div>
 
     							<div id="collapseFour" className="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-      								<div className="card-body">
-       									Aqui vendria una lista de eventos Creados
-      								</div>
+      								{
+      									this.state.misEventos.eventos.map((event, i) => {
+      										if (this.controlFilter(event)) {
+      										return(
+			      								<div className="card-body" id="eventos" key={i}>
+													<div className="eventcard">
+														<div className="eventcard-header">
+														<h3>{event.nombre}</h3>
+														</div>
+														<div className="eventcard-body">
+															<li>Creador: {event.creador.nombre}</li>
+															<li>Fecha: {event.fecha}</li>
+															<li>Ubicacion: {event.nombreUbicacion}</li>
+															<div className="btn-evento-register">
+																<span className="popup-map-admin-launcher"
+																	onClick={this.onDetalle.bind(this)}
+																	id={event.id} name={"left"}>
+																	Ver mas
+																</span>
+															</div>
+														</div>
+														<div className="eventcard-footer">
+															Aqui irian categorias y si es oficial o no
+														</div>
+													</div>
+			      								</div>
+      										);
+      										}
+      									})
+      								}
     							</div>
   							</div>  
 

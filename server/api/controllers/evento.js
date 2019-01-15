@@ -44,7 +44,6 @@ exports.get_event_enabled = (req, res, next) => {
 // Devuelve todos los eventos asociados a una ubicacion
 exports.get_event_by_id = (req, res, next) => {
 	const id = req.params.id;
-	console.log(id);
 	Evento.find({ubicacion: id, estado: true}, null, {sort: {fecha: -1}, sort: {hora: -1}})
 	.populate("categoria")
 	.populate("creador")

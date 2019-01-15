@@ -544,7 +544,7 @@ class RegisterMap extends Component {
 
 									<span className="popup-map-admin-launcher"
 									 onClick={this.props.onActiveSidebarRight}
-									 id={oh._id}
+									 id={oh._id} nameubicacion={oh.nombre}
 									 >
 										Ver Eventos
 									</span>
@@ -607,7 +607,7 @@ class RegisterMap extends Component {
 
 									<span className="popup-map-admin-launcher"
 									 onClick={this.props.onActiveSidebarRight}
-									 id={ol._id}
+									 id={ol._id} nameubicacion={ol.nombre}
 									 >
 										Ver Eventos
 									</span>
@@ -823,7 +823,6 @@ class Register extends Component {
   	}
 
   	agregarNewEvento(data) {
-  		console.log(data.EventoCreado);
   		const nuevo_evento = data.EventoCreado;
   		const temp = this.state.eventos;
   		if (temp.indexOf(nuevo_evento) === -1) {
@@ -865,7 +864,6 @@ class Register extends Component {
 			});
 		} else {
 			this.state.eventos.forEach(event => {
-				console.log(event);
 				if(event.id === id) {
 					const creador = event.creador.nombre;
 					const categoria = event.categoria;
@@ -887,7 +885,6 @@ class Register extends Component {
 	}
 
   	changeSideNavBar() {
-  		console.log(this.state.eventos);
   		let arg = "active";
   		let msgBtn = "Mostrar Menú";
   		if (this.state.controlSidebar.sideNavBar === "active") {
@@ -913,6 +910,7 @@ class Register extends Component {
 		let onSideNavBar = "active";
 		let onShadowBar = "";
 		const idUbicacion = e.target.id;
+		const nameubicacion = e.target.getAttribute("nameubicacion"); 
 		if (this.state.controlSidebarRight.sideNavBar === "active") {
 			onSideNavBar = "";
 			onShadowBar = "active";
@@ -920,7 +918,8 @@ class Register extends Component {
 			Auth.fetch(url, {method: "GET"})
 			.then(result => {
 				this.setState({
-					eventBarRight: result.Eventos
+					eventBarRight: result.Eventos,
+					nombreUbicacion: nameubicacion
 				});
 			})
 			.catch(err => console.log(err));
@@ -1070,7 +1069,7 @@ class Register extends Component {
 							<hr></hr>
 							<div className ="row">
 								<div className = "col">
-									<h5>Eventos en .....</h5>
+									<h5>Eventos en {this.state.nombreUbicacion} </h5>
 								</div>	
 							</div>
 							<hr></hr>

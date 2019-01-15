@@ -143,7 +143,8 @@ class RegisterMap extends Component {
 			newEvento: {
 				categorias: [], 
 				idUbicacion: "",
-				ordenUbicacion: ""
+				ordenUbicacion: "",
+				nombreUbicacion: ""
 			},
 			tipolocation: [],
 			lastCoordinates: [],
@@ -151,7 +152,8 @@ class RegisterMap extends Component {
 			onMarkerHigh: [],
 			orderslow: [],
 			onMarkerLow: [],
-			categorias: []
+			categorias: [],
+			eventos: []
 		};
 		this.cargaSectores = this.cargaSectores.bind(this);
 		this.cargaTipoUbicaciones = this.cargaTipoUbicaciones.bind(this);
@@ -182,7 +184,6 @@ class RegisterMap extends Component {
 		let value = {};
 		value["op"] = 1;
 		value["categorias"] = this.state.categorias;
-		console.log(value); 
     } 
 
 	cargaSectores() {
@@ -202,7 +203,6 @@ class RegisterMap extends Component {
 		let options = {
 			method: "GET"
 		};
-
 		Auth.fetch(url, options)
 		.then(result => {
 			let a = [];
@@ -219,7 +219,6 @@ class RegisterMap extends Component {
 		let options = {
 			method: "GET"
 		};
-		
 		Auth.fetch(url, options)
 		.then(result => {
 			let a = [];
@@ -248,10 +247,10 @@ class RegisterMap extends Component {
 		let options = { method: "GET"};
 		Auth.fetch(url, options)
 		.then(result => {
-			this.props.onGetCategorias(result);
 			this.setState({
 				categorias: result.Categorias
 			});
+			this.props.onGetCategorias(result);
 		})
 		.catch(err => console.log(err));
 	}
@@ -271,7 +270,7 @@ class RegisterMap extends Component {
 
 	crearEvento(e) {
 		const validator = Object.keys(this.state.newEvento).length;
-		if (validator === 7 && this.state.newEvento.length != 0) {
+		if (validator === 8 && this.state.newEvento.length != 0) {
 			let url = Auth.domain + "/evento";
 			const body = {
 				nombre: this.state.newEvento.nombre_evento,
@@ -283,7 +282,8 @@ class RegisterMap extends Component {
 				categoria: this.state.newEvento.categorias,
 				creador: this.state.usuario.id,
 				ubicacion: this.state.newEvento.idUbicacion,
-				ordenUbicacion: this.state.newEvento.ordenUbicacion
+				ordenUbicacion: this.state.newEvento.ordenUbicacion,
+				nombreUbicacion: this.state.newEvento.nombreUbicacion
 			};
 			let options = {
 				method: "POST",
@@ -291,7 +291,7 @@ class RegisterMap extends Component {
 			};
 			Auth.fetch(url, options)
 			.then(result => {
-				console.log(result);
+				this.props.changeEventos(result);
 				this.setState({
 					modals: {
 						...this.state.modals,
@@ -379,11 +379,13 @@ class RegisterMap extends Component {
 	onPopupClick(e) {
 		const idUbicacion = e.target.options.id;
 		const ordenUbicacion = e.target.options.value;
+		const nombreUbicacion = e.target.options.nombre;
 		this.setState({
 			newEvento: {
 				...this.state.newEvento,
 				idUbicacion: idUbicacion,
-				ordenUbicacion: ordenUbicacion
+				ordenUbicacion: ordenUbicacion,
+				nombreUbicacion: nombreUbicacion
 			}
 		})
 	}
@@ -497,7 +499,7 @@ class RegisterMap extends Component {
 	        						icon={this.getIcon(oh.tipo, this.state.onMarkerHigh[i])}	
 	        						name={i} value={"high"}
 	        						onClick={this.onPopupClick.bind(this)}
-	        						id={oh._id}
+	        						id={oh._id} nombre={oh.nombre}
 	        					>
 
 	        					<Popup>
@@ -541,7 +543,9 @@ class RegisterMap extends Component {
 									</span>
 
 									<span className="popup-map-admin-launcher"
-									 onClick={this.props.onActiveSidebarRight}>
+									 onClick={this.props.onActiveSidebarRight}
+									 id={oh._id}
+									 >
 										Ver Eventos
 									</span>
 
@@ -559,7 +563,7 @@ class RegisterMap extends Component {
 	        					<Marker key={ol._id} position={ol.geometria} 
 	        						icon={this.getIcon(ol.tipo, this.state.onMarkerLow[i])}
 	        						onClick={this.onPopupClick.bind(this)}
-	        						name={i} value={"low"} id={ol._id}
+	        						name={i} value={"low"} id={ol._id} nombre={ol.nombre}
 	        					>
 	        					<Popup>
 
@@ -602,7 +606,9 @@ class RegisterMap extends Component {
 									</span>
 
 									<span className="popup-map-admin-launcher"
-									 onClick={this.props.onActiveSidebarRight}>
+									 onClick={this.props.onActiveSidebarRight}
+									 id={ol._id}
+									 >
 										Ver Eventos
 									</span>
 
@@ -743,13 +749,8 @@ class RegisterMap extends Component {
 				</Modal>
 
         	</div>
-
-
-
-
 		);
 	}
-
 }
 
 class Register extends Component {
@@ -780,12 +781,13 @@ class Register extends Component {
 			categorias: [],
 			auxCategorias: [],
 			eventos: [],
-			auxEventos: []
+			eventBarRight: []
 		};
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onDetalle = this.onDetalle.bind(this);
 		this.cargaCategorias = this.cargaCategorias.bind(this);
 		this.onActiveSidebarRight = this.onActiveSidebarRight.bind(this);
+		this.agregarNewEvento = this.agregarNewEvento.bind(this);
 	}
 
 	componentWillMount() {
@@ -812,6 +814,18 @@ class Register extends Component {
 
   	cargarEventos(data) {
   		this.setState({eventos: data.Eventos});
+  	}
+
+  	agregarNewEvento(data) {
+  		console.log(data.EventoCreado);
+  		const nuevo_evento = data.EventoCreado;
+  		const temp = this.state.eventos;
+  		if (temp.indexOf(nuevo_evento) === -1) {
+  			temp.push(nuevo_evento);
+  			this.setState({
+  				eventos: temp
+  			})
+  		}
   	}
 
   	closeModalMap(e) {
@@ -856,12 +870,21 @@ class Register extends Component {
   		});  
 	}
 
-	onActiveSidebarRight() {
-		let onSideNavBar = "";
-		let onShadowBar = "active";
-		if (this.state.controlSidebarRight.sideNavBar === "") {
-			onSideNavBar = "active";
-			onShadowBar = "";
+	onActiveSidebarRight(e) {
+		let onSideNavBar = "active";
+		let onShadowBar = "";
+		const idUbicacion = e.target.id;
+		if (this.state.controlSidebarRight.sideNavBar === "active") {
+			onSideNavBar = "";
+			onShadowBar = "active";
+			let url = Auth.domain + "/evento/all/" + idUbicacion;
+			Auth.fetch(url, {method: "GET"})
+			.then(result => {
+				this.setState({
+					eventBarRight: result.Eventos
+				});
+			})
+			.catch(err => console.log(err));
 		}
 		this.setState({
 			controlSidebarRight: {
@@ -869,7 +892,7 @@ class Register extends Component {
 				sideNavBar: onSideNavBar,
 				overlay: onShadowBar
 			}
-		})
+		});
 	}
 
   	handleRegisterMap(value) {
@@ -925,25 +948,25 @@ class Register extends Component {
 
     							<div id="collapseTwo" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
       								<div className="card-body" id="eventos">
-											<div className="eventcard">
-												<div className="eventcard-header">
-												<h3>Nombre del evento</h3>
-												</div>
-												<div className="eventcard-body">
-													<li>Creador: EsteMen</li>
-													<li>Fecha: 14/01/2019</li>
-													<li>Ubicacion: Cite Camp</li>
-													<div className="btn-evento-register">
-														<span className="popup-map-admin-launcher"
-														 onClick={this.onDetalle.bind(this)}>
-															Ver mas
-														</span>
-													</div>
-												</div>
-												<div className="eventcard-footer">
-													Aqui irian categorias y si es oficial o no
+										<div className="eventcard">
+											<div className="eventcard-header">
+											<h3>Nombre del evento</h3>
+											</div>
+											<div className="eventcard-body">
+												<li>Creador: EsteMen</li>
+												<li>Fecha: 14/01/2019</li>
+												<li>Ubicacion: Cite Camp</li>
+												<div className="btn-evento-register">
+													<span className="popup-map-admin-launcher"
+														onClick={this.onDetalle.bind(this)}>
+														Ver mas
+													</span>
 												</div>
 											</div>
+											<div className="eventcard-footer">
+												Aqui irian categorias y si es oficial o no
+											</div>
+										</div>
       								</div>
     							</div>
   							</div>
@@ -1014,31 +1037,34 @@ class Register extends Component {
 
     							
       							<div className="card-body" id="eventos">
-
-									<div className="eventcard">
-										<div className="eventcard-header">
-											<h3>Nombre del evento</h3>
-										</div>
-										<div className="eventcard-body">
-											<li>Creador: EsteMen</li>
-											<li>Fecha: 14/01/2019</li>
-											<li>Ubicacion: Cite Camp</li>
-											<div className="btn-evento-register">
-												<span className="popup-map-admin-launcher"
-												onClick={this.onDetalle.bind(this)}>
-													Ver mas
-												</span>
-											</div>
-										</div>
-										<div className="eventcard-footer">
-											Aqui irian categorias y si es oficial o no
-										</div>
-									</div>
-
+      								{
+      									this.state.eventBarRight.map((event, i) => {
+      										return(
+												<div className="eventcard" key={i}>
+													<div className="eventcard-header">
+														<h3>{event.nombre}</h3>
+													</div>
+													<div className="eventcard-body">
+														<li>Creador: {event.creador.nombre + " " + event.creador.apellido}</li>
+														<li>Fecha: {event.fecha}</li>
+														<li>Hora: {event.horaInicio}</li>
+														<li>Ubicacion: {event.nombreUbicacion}</li>
+														<div className="btn-evento-register">
+															<span className="popup-map-admin-launcher"
+															onClick={this.onDetalle.bind(this)}>
+																Ver mas
+															</span>
+														</div>
+													</div>
+													<div className="eventcard-footer">
+														Aqui irian categorias y si es oficial o no
+													</div>
+												</div>
+      										);
+      									})
+      								}
       							</div>
-    							
   							</div>
-							
 						</div>
 					</nav>
 
@@ -1064,7 +1090,8 @@ class Register extends Component {
 							<RegisterMap usuario={this.state.usuario}
 							 onGetCategorias={this.cargaCategorias.bind(this)}
 							 onGetEventos={this.cargarEventos.bind(this)} 
-							 onActiveSidebarRight={this.onActiveSidebarRight.bind(this)} />	
+							 onActiveSidebarRight={this.onActiveSidebarRight.bind(this)} 
+							 changeEventos={this.agregarNewEvento.bind(this)} />	
 						</div>
 
 

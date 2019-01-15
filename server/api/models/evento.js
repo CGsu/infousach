@@ -23,7 +23,8 @@ const eventoSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		required: true
 	},
-	ordenUbicacion: { type: String, required: true }
+	ordenUbicacion: { type: String, required: true },
+	nombreUbicacion: { type: String, required: true }
 });
 
 module.exports = mongoose.model("Evento", eventoSchema);

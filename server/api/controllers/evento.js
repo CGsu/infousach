@@ -36,6 +36,41 @@ exports.get_event_enabled = (req, res, next) => {
 	});
 };
 
+// Devuelve todos los eventos asociados a una ubicacion
+exports.get_event_by_id = (req, res, next) => {
+	const id = req.params.id;
+	console.log(id);
+	Evento.find({ubicacion: id, estado: true}, null, {sort: {fecha: 1} })
+	.populate("categoria")
+	.populate("creador")
+	.then(docs => {
+		const respuesta = {
+			count: docs.length,
+			Eventos: docs.map(doc => {
+				return {
+					id: doc._id,
+					nombre: doc.nombre,
+					descripcion: doc.descripcion,
+					fecha: doc.fecha,
+					horaInicio: doc.horaInicio,
+					tipo: doc.tipo,
+					estado: doc.estado,
+					categoria: doc.categoria,
+					creador: doc.creador,
+					ubicacion: doc.ubicacion,
+					ordenUbicacion: doc.ordenUbicacion,
+					nombreUbicacion: doc.nombreUbicacion
+				}
+			})
+		};
+		res.status(200).json(respuesta);
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: err});
+	});
+};
+
 // Inserta un nuevo evento al sistema
 exports.insert_new_event = (req, res, next) => {
 	const evento = new Evento ({
@@ -49,7 +84,8 @@ exports.insert_new_event = (req, res, next) => {
 		categoria: req.body.categoria,
 		creador: req.body.creador,
 		ubicacion: req.body.ubicacion,
-		ordenUbicacion: req.body.ordenUbicacion
+		ordenUbicacion: req.body.ordenUbicacion,
+		nombreUbicacion: req.body.nombreUbicacion
 	});
 	evento.save()
 	.then(result => {
@@ -66,7 +102,8 @@ exports.insert_new_event = (req, res, next) => {
 				categoria: result.categoria,
 				creador: result.creador,
 				ubicacion: result.ubicacion,
-				ordenUbicacion: result.ordenUbicacion
+				ordenUbicacion: result.ordenUbicacion,
+				nombreUbicacion: result.nombreUbicacion
 			}
 		});
 	})

@@ -6,25 +6,30 @@ const Categoria = require("./../models/categoria");
 
 // Devuelve todos los eventos con estado activo
 exports.get_event_enabled = (req, res, next) => {
-	Evento.find({estado: true}, null, {sort: {fecha: 1} })
+	Evento.find({estado: true}, null, {sort: {fecha: -1}, sort: {hora: -1} })
 	.populate("categoria")
 	.populate("creador")
 	.then(docs => {
 		const respuesta = {
 			count: docs.length,
 			Eventos: docs.map(doc => {
+				const dia = doc.fecha.getDate();
+				const mes = doc.fecha.getMonth() + 1;
+				const ano = doc.fecha.getFullYear();
+				const fecha = dia+"-"+mes+"-"+ano;
 				return {
 					id: doc._id,
 					nombre: doc.nombre,
 					descripcion: doc.descripcion,
-					fecha: doc.fecha,
+					fecha: fecha,
 					horaInicio: doc.horaInicio,
 					tipo: doc.tipo,
 					estado: doc.estado,
 					categoria: doc.categoria,
 					creador: doc.creador,
 					ubicacion: doc.ubicacion,
-					ordenUbicacion: doc.ordenUbicacion
+					ordenUbicacion: doc.ordenUbicacion,
+					nombreUbicacion: doc.nombreUbicacion
 				}
 			})
 		};
@@ -40,18 +45,22 @@ exports.get_event_enabled = (req, res, next) => {
 exports.get_event_by_id = (req, res, next) => {
 	const id = req.params.id;
 	console.log(id);
-	Evento.find({ubicacion: id, estado: true}, null, {sort: {fecha: 1} })
+	Evento.find({ubicacion: id, estado: true}, null, {sort: {fecha: -1}, sort: {hora: -1}})
 	.populate("categoria")
 	.populate("creador")
 	.then(docs => {
 		const respuesta = {
 			count: docs.length,
 			Eventos: docs.map(doc => {
+				const dia = doc.fecha.getDate();
+				const mes = doc.fecha.getMonth() + 1;
+				const ano = doc.fecha.getFullYear();
+				const fecha = dia+"-"+mes+"-"+ano;
 				return {
 					id: doc._id,
 					nombre: doc.nombre,
 					descripcion: doc.descripcion,
-					fecha: doc.fecha,
+					fecha: fecha,
 					horaInicio: doc.horaInicio,
 					tipo: doc.tipo,
 					estado: doc.estado,

@@ -4,6 +4,12 @@ const Ubicacion = require("./../models/ubicacion");
 const User = require("./../models/user");
 const Categoria = require("./../models/categoria");
 
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
+
 // Devuelve todos los eventos con estado activo
 exports.get_event_enabled = (req, res, next) => {
 	Evento.find({estado: true}, null, {sort: {fecha: -1}, sort: {hora: -1} })
@@ -45,6 +51,84 @@ exports.get_event_enabled = (req, res, next) => {
 exports.get_event_by_id = (req, res, next) => {
 	const id = req.params.id;
 	Evento.find({ubicacion: id, estado: true}, null, {sort: {fecha: -1}, sort: {hora: -1}})
+	.populate("categoria")
+	.populate("creador")
+	.then(docs => {
+		const respuesta = {
+			count: docs.length,
+			Eventos: docs.map(doc => {
+				const dia = doc.fecha.getDate();
+				const mes = doc.fecha.getMonth() + 1;
+				const ano = doc.fecha.getFullYear();
+				const fecha = dia+"-"+mes+"-"+ano;
+				return {
+					id: doc._id,
+					nombre: doc.nombre,
+					descripcion: doc.descripcion,
+					fecha: fecha,
+					horaInicio: doc.horaInicio,
+					tipo: doc.tipo,
+					estado: doc.estado,
+					categoria: doc.categoria,
+					creador: doc.creador,
+					ubicacion: doc.ubicacion,
+					ordenUbicacion: doc.ordenUbicacion,
+					nombreUbicacion: doc.nombreUbicacion
+				}
+			})
+		};
+		res.status(200).json(respuesta);
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: err});
+	});
+};
+
+// Devuelve todos los eventos de un user
+exports.get_event_by_user_id = (req, res, next) => {
+	const id = req.params.id;
+	Evento.find({creador: id, estado: true}, null, {sort: {fecha: -1}, sort: {hora: -1}})
+	.populate("categoria")
+	.populate("creador")
+	.then(docs => {
+		const respuesta = {
+			count: docs.length,
+			Eventos: docs.map(doc => {
+				const dia = doc.fecha.getDate();
+				const mes = doc.fecha.getMonth() + 1;
+				const ano = doc.fecha.getFullYear();
+				const fecha = dia+"-"+mes+"-"+ano;
+				return {
+					id: doc._id,
+					nombre: doc.nombre,
+					descripcion: doc.descripcion,
+					fecha: fecha,
+					horaInicio: doc.horaInicio,
+					tipo: doc.tipo,
+					estado: doc.estado,
+					categoria: doc.categoria,
+					creador: doc.creador,
+					ubicacion: doc.ubicacion,
+					ordenUbicacion: doc.ordenUbicacion,
+					nombreUbicacion: doc.nombreUbicacion
+				}
+			})
+		};
+		res.status(200).json(respuesta);
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({error: err});
+	});
+};
+
+// Devuelve los eventos que ocurriran durante ciertas fechas
+exports.get_event_next = (req, res, next) => {
+	const days = 1;
+	const start_date = new Date();
+	const end_date = start_date.addDays(days);
+	Evento.find({estado: true, fecha: { "$gte": start_date, "$lt": end_date } }, null, {sort: {fecha: -1}, sort: {hora: -1}})
 	.populate("categoria")
 	.populate("creador")
 	.then(docs => {

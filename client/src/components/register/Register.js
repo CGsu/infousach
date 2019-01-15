@@ -783,17 +783,29 @@ class Register extends Component {
 				creador: "",
 				categoria: []
 			},
+			misEventos: {
+				eventos: [],
+				band: true
+			},
+			proxEventos: {
+				eventos: [],
+				band: true
+			},
 			categorias: [],
-			auxCategorias: [],
+			filtros: [],
+			whichFilter: [],
 			eventos: [],
-			eventBarRight: [],
-
+			eventBarRight: []
 		};
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onDetalle = this.onDetalle.bind(this);
 		this.cargaCategorias = this.cargaCategorias.bind(this);
 		this.onActiveSidebarRight = this.onActiveSidebarRight.bind(this);
 		this.agregarNewEvento = this.agregarNewEvento.bind(this);
+		this.misEventos = this.misEventos.bind(this);
+		this.proxEventos = this.proxEventos.bind(this);
+		this.managerFilter = this.managerFilter.bind(this);
+		this.controlFilter = this.controlFilter.bind(this);
 	}
 
 	componentWillMount() {
@@ -815,7 +827,16 @@ class Register extends Component {
   	}
 
   	cargaCategorias(data) {
+  		const temp = data.Categorias.slice(0);
+  		temp.push({"name": "evento oficial"});
+  		temp.push({"name": "evento no oficial"});
   		this.setState({categorias: data.Categorias});
+  		this.setState({filtros: temp});
+  		let filtros = [];
+  		temp.forEach((filtro) => {
+  			filtros.push(filtro.name);
+  		});
+  		this.setState({whichFilter: filtros});
   	}
 
   	cargarEventos(data) {
@@ -934,13 +955,89 @@ class Register extends Component {
 		});
 	}
 
+	misEventos() {
+		const open = this.state.misEventos.band;
+		if (open) {
+			let url = Auth.domain + "/evento/user/" + this.state.usuario.id;
+			Auth.fetch(url, {method: "GET"})
+			.then(result => {
+				this.setState({
+					misEventos: {
+						eventos: result.Eventos,
+						band: !open
+					}
+				});
+			})
+			.catch(err => console.log(err));
+		} else {
+			this.setState({
+				misEventos: {
+					...this.state.misEventos,
+					band: !open
+				}
+			});
+		}
+	}
+
+	proxEventos() {
+		const open = this.state.proxEventos.band;
+		if (open) {
+			let url = Auth.domain + "/evento/proximo";
+			Auth.fetch(url, {method: "GET"})
+			.then(result => {
+				this.setState({
+					proxEventos: {
+						eventos: result.Eventos,
+						band: !open
+					}
+				});
+			})
+			.catch(err => console.log(err));
+		} else {
+			this.setState({
+				misEventos: {
+					...this.state.proxEventos,
+					band: !open
+				}
+			});
+			console.log(this.state.proxEventos.eventos);
+		}
+	}
+
   	handleRegisterMap(value) {
   		const op = value.opcion;
   		if (op === 1) {
   			this.setState({categorias: value.categorias});
   		}
-	  }
-	  
+	}
+
+	managerFilter(e) {
+		const filtro = e.target.id;
+		const temp = this.state.whichFilter;
+		const index = temp.indexOf(filtro);
+		if (index === -1) {
+			temp.push(filtro);
+		} else {
+			temp.splice(index, 1);
+		}
+		this.setState({ whichFilter: temp });
+	}
+	
+	controlFilter(evento) {
+		let cond1 = false, cond2 = false;
+		const temp = this.state.whichFilter;
+		// Primero verificamos las categorias
+		evento.categoria.forEach((categoria) => {
+			if (temp.indexOf(categoria.nombre) > -1) {
+				cond1 = true;
+			}
+		});
+		// Verificamos tipo de evento
+		evento.tipo === "oficial" ? (temp.indexOf("evento oficial") > -1 ? cond2 = true : cond2 = false)
+								  : (temp.indexOf("evento no oficial") > -1 ? cond2 = true : cond2 = false); 
+
+		return cond1 && cond2;
+	}  
 
 	render() {
 		return (
@@ -964,11 +1061,12 @@ class Register extends Component {
 							    <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
       								<div className="card-body">
 	      								{
-	      									this.state.categorias.map((categoria, i) => {
+	      									this.state.filtros.map((filtro, i) => {
 	      										return (
 													<div key={i} className="custom-control custom-checkbox">
-														<input defaultChecked type="checkbox" className="custom-control-input" id={categoria.name}></input>
-														<label className="custom-control-label" htmlFor={categoria.name}>{categoria.name}</label>
+														<input defaultChecked type="checkbox" className="custom-control-input" id={filtro.name}
+														 onClick={this.managerFilter.bind(this)}></input>
+														<label className="custom-control-label" htmlFor={filtro.name}>{filtro.name}</label>
 													</div>
 	      										);
 	      									})
@@ -980,7 +1078,8 @@ class Register extends Component {
   							<div className="card">
     							<div className="card-header" id="headingTwo">
       								<h5 className="mb-0">
-        								<button className="perfil menu-op register-btn-options admin-button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        								<button className="perfil menu-op register-btn-options admin-button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+        								  onClick={this.proxEventos.bind(this)}>
 										Proximos Eventos
         								</button>
       								</h5>
@@ -988,7 +1087,8 @@ class Register extends Component {
 
     							<div id="collapseTwo" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
       								{
-      									this.state.eventos.map((event, i) => {
+      									this.state.proxEventos.eventos.map((event, i) => {
+      										if (this.controlFilter(event)) {
       										return(
 			      								<div className="card-body" id="eventos" key={i}>
 													<div className="eventcard">
@@ -1013,6 +1113,7 @@ class Register extends Component {
 													</div>
 			      								</div>
       										);
+      										}
       									})
       								}
     							</div>
@@ -1021,16 +1122,15 @@ class Register extends Component {
   							<div className="card">
     							<div className="card-header" id="headingThree">
       								<h5 className="mb-0">
-        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          									Registrados
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
+        								 onClick={this.misEventos.bind(this)}>
+          									¿Qué eventos he creado?
         								</button>
       								</h5>
     							</div>
 
-    							<div id="collapseThree" className="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-      								<div className="card-body">
-       									Aqui vendria una lista de eventos registrados?
-      								</div>
+    							<div id="collapseThree" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
+      								registrados
     							</div>
   							</div>
 
@@ -1038,7 +1138,7 @@ class Register extends Component {
     							<div className="card-header" id="headingFour">
       								<h5 className="mb-0">
         								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-          									Registrados
+          									Eventos 
         								</button>
       								</h5>
     							</div>

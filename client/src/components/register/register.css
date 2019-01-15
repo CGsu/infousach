@@ -179,11 +179,13 @@
 .eventcard-body{
     background-color: whitesmoke;
     color: black;
+    padding-left: 5%;
+    overflow-x: hidden;
 }
 /*#B7B6C2*/
 .eventcard-footer{
-    background-color: #EA7600;
-    color: white;
+    background-color: whitesmoke;
+    color: black;
     padding: 1px;
 }
 #eventos{
@@ -239,3 +241,4 @@
     display: block;
     opacity: 1;
 }
+

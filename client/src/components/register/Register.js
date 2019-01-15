@@ -778,6 +778,10 @@ class Register extends Component {
 			modals: {
 				modalAsociar: false
 			},
+			detallemodal:{
+				modalAsociar: false,
+				event_id: ""
+			},
 			categorias: [],
 			auxCategorias: [],
 			eventos: [],
@@ -840,10 +844,11 @@ class Register extends Component {
 		}
 	}
 
-	onDetalle() {
+	onDetalle(e) {
 		this.setState({
 			modals: {
-				modalAsociar: true
+				modalAsociar: true,
+				event_id: e.target.id
 			}
 		});
 	}
@@ -900,7 +905,8 @@ class Register extends Component {
   		if (op === 1) {
   			this.setState({categorias: value.categorias});
   		}
-  	}
+	  }
+	  
 
 	render() {
 		return (
@@ -1042,22 +1048,41 @@ class Register extends Component {
       										return(
 												<div className="eventcard" key={i}>
 													<div className="eventcard-header">
-														<h3>{event.nombre}</h3>
+														<h5>Evento : {event.nombre}</h5>
 													</div>
 													<div className="eventcard-body">
-														<li>Creador: {event.creador.nombre + " " + event.creador.apellido}</li>
-														<li>Fecha: {event.fecha}</li>
-														<li>Hora: {event.horaInicio}</li>
-														<li>Ubicacion: {event.nombreUbicacion}</li>
+														<div className="row">
+															<div className="col-sm-5">
+															Creador:
+															</div>
+															<div className="col">
+																{event.creador.nombre + " " + event.creador.apellido}
+															</div>
+														</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Fecha:
+															</div>
+															<div className="col">
+																{event.fecha}
+															</div>
+														</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Tipo:
+															</div>
+															<div className="col">
+															{event.tipo.replace("_"," ")}
+															</div>
+														</div>
 														<div className="btn-evento-register">
 															<span className="popup-map-admin-launcher"
 															onClick={this.onDetalle.bind(this)}>
 																Ver mas
 															</span>
 														</div>
-													</div>
-													<div className="eventcard-footer">
-														Aqui irian categorias y si es oficial o no
 													</div>
 												</div>
       										);

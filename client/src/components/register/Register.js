@@ -879,7 +879,8 @@ class Register extends Component {
 		}
 		this.setState({
 			modals: {
-				modalAsociar: true
+				modalAsociar: true,
+				event_id: e.target.id
 			}
 		});
 	}
@@ -938,7 +939,8 @@ class Register extends Component {
   		if (op === 1) {
   			this.setState({categorias: value.categorias});
   		}
-  	}
+	  }
+	  
 
 	render() {
 		return (
@@ -1087,13 +1089,35 @@ class Register extends Component {
       										return(
 												<div className="eventcard" key={i}>
 													<div className="eventcard-header">
-														<h3>{event.nombre}</h3>
+														<h5>Evento : {event.nombre}</h5>
 													</div>
 													<div className="eventcard-body">
-														<li>Creador: {event.creador.nombre + " " + event.creador.apellido}</li>
-														<li>Fecha: {event.fecha}</li>
-														<li>Hora: {event.horaInicio}</li>
-														<li>Ubicacion: {event.nombreUbicacion}</li>
+														<div className="row">
+															<div className="col-sm-5">
+															Creador:
+															</div>
+															<div className="col">
+																{event.creador.nombre + " " + event.creador.apellido}
+															</div>
+														</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Fecha:
+															</div>
+															<div className="col">
+																{event.fecha}
+															</div>
+														</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Tipo:
+															</div>
+															<div className="col">
+															{event.tipo.replace("_"," ")}
+															</div>
+														</div>
 														<div className="btn-evento-register">
 															<span className="popup-map-admin-launcher"
 															onClick={this.onDetalle.bind(this)}
@@ -1101,9 +1125,6 @@ class Register extends Component {
 																Ver mas
 															</span>
 														</div>
-													</div>
-													<div className="eventcard-footer">
-														Aqui irian categorias y si es oficial o no
 													</div>
 												</div>
       										);
@@ -1164,7 +1185,7 @@ class Register extends Component {
 									</div>
 									<div className="modal-body lanzador-modal-body">
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Descripción: 
 												</div>
 												<div className ="col"> 
@@ -1175,7 +1196,7 @@ class Register extends Component {
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Ubicación:
 												</div>
 												<div className ="col"> 
@@ -1186,7 +1207,7 @@ class Register extends Component {
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Fecha:
 												</div>
 												<div className ="col"> 
@@ -1197,7 +1218,7 @@ class Register extends Component {
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Creador:
 												</div>
 												<div className ="col"> 
@@ -1208,25 +1229,26 @@ class Register extends Component {
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Tipo:
 												</div>
 												<div className ="col"> 
-												{this.state.modalDetalle.eventoModal.tipo}
+													{this.state.modalDetalle.eventoModal.tipo? this.state.modalDetalle.eventoModal.tipo.replace("_"," "):"?" }
 												</div>
 											</div>
 
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Categorias:
 												</div>
 												<div className ="col">
-												{
+												{	
 													this.state.modalDetalle.categoria.map((cat, i) => {
+														const len=this.state.modalDetalle.categoria.length-1;
 														return(
-															<span key={i}><small>{cat.nombre}</small></span>
+															<span key={i}><small>{cat.nombre}{len === i?"":","}</small></span> 
 														);
 													})
 												}
@@ -1234,9 +1256,9 @@ class Register extends Component {
 											</div>
 									</div>
 									<div className="modal-footer lanzador-modal-footer">
-										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
+										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cerrar"
 												onClick={this.closeModalMap.bind(this)} name="asociar" />
-										<input type="submit" className="btn btn-danger" value="asociar"
+										<input type="submit" className="btn btn-primary" value="Suscribir"
 												onClick={this.closeModalMap.bind(this)} />
 									</div>
 								</form>

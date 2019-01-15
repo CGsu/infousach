@@ -778,14 +778,16 @@ class Register extends Component {
 			modals: {
 				modalAsociar: false
 			},
-			detallemodal:{
-				modalAsociar: false,
-				event_id: ""
+			modalDetalle: {
+				eventoModal: "",
+				creador: "",
+				categoria: []
 			},
 			categorias: [],
 			auxCategorias: [],
 			eventos: [],
-			eventBarRight: []
+			eventBarRight: [],
+
 		};
 		this.closeModalMap = this.closeModalMap.bind(this);
 		this.onDetalle = this.onDetalle.bind(this);
@@ -845,6 +847,38 @@ class Register extends Component {
 	}
 
 	onDetalle(e) {
+		const id = e.target.id;
+		const name = e.target.getAttribute("name");
+		if(name === "right") {
+			this.state.eventBarRight.forEach(event => {
+				const creador = event.creador.nombre;
+				const categoria = event.categoria;
+				if(event.id === id) {
+					this.setState({
+						modalDetalle: {
+							eventoModal: event,
+							creador: creador,
+							categoria: categoria
+						}
+					});
+				}
+			});
+		} else {
+			this.state.eventos.forEach(event => {
+				console.log(event);
+				if(event.id === id) {
+					const creador = event.creador.nombre;
+					const categoria = event.categoria;
+					this.setState({
+						modalDetalle: {
+							eventoModal: event,
+							creador: event.creador.nombre,
+							categoria: event.categoria
+						}
+					});
+				}
+			});
+		}
 		this.setState({
 			modals: {
 				modalAsociar: true,
@@ -854,6 +888,7 @@ class Register extends Component {
 	}
 
   	changeSideNavBar() {
+  		console.log(this.state.eventos);
   		let arg = "active";
   		let msgBtn = "Mostrar Menú";
   		if (this.state.controlSidebar.sideNavBar === "active") {
@@ -953,27 +988,34 @@ class Register extends Component {
     							</div>
 
     							<div id="collapseTwo" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
-      								<div className="card-body" id="eventos">
-										<div className="eventcard">
-											<div className="eventcard-header">
-											<h3>Nombre del evento</h3>
-											</div>
-											<div className="eventcard-body">
-												<li>Creador: EsteMen</li>
-												<li>Fecha: 14/01/2019</li>
-												<li>Ubicacion: Cite Camp</li>
-												<div className="btn-evento-register">
-													<span className="popup-map-admin-launcher"
-														onClick={this.onDetalle.bind(this)}>
-														Ver mas
-													</span>
-												</div>
-											</div>
-											<div className="eventcard-footer">
-												Aqui irian categorias y si es oficial o no
-											</div>
-										</div>
-      								</div>
+      								{
+      									this.state.eventos.map((event, i) => {
+      										return(
+			      								<div className="card-body" id="eventos" key={i}>
+													<div className="eventcard">
+														<div className="eventcard-header">
+														<h3>{event.nombre}</h3>
+														</div>
+														<div className="eventcard-body">
+															<li>Creador: {event.creador.nombre}</li>
+															<li>Fecha: {event.fecha}</li>
+															<li>Ubicacion: {event.nombreUbicacion}</li>
+															<div className="btn-evento-register">
+																<span className="popup-map-admin-launcher"
+																	onClick={this.onDetalle.bind(this)}
+																	id={event.id} name={"left"}>
+																	Ver mas
+																</span>
+															</div>
+														</div>
+														<div className="eventcard-footer">
+															Aqui irian categorias y si es oficial o no
+														</div>
+													</div>
+			      								</div>
+      										);
+      									})
+      								}
     							</div>
   							</div>
 
@@ -1079,7 +1121,8 @@ class Register extends Component {
 														</div>
 														<div className="btn-evento-register">
 															<span className="popup-map-admin-launcher"
-															onClick={this.onDetalle.bind(this)}>
+															onClick={this.onDetalle.bind(this)}
+															id={event.id} name={"right"} >
 																Ver mas
 															</span>
 														</div>
@@ -1125,8 +1168,6 @@ class Register extends Component {
 				</div>
 				<div id="overlayright" className={this.state.controlSidebarRight.overlay}></div>
 
-
-
 				<Modal isOpen={this.state.modals.modalAsociar}
 					transparent={true}
 					animationType="fade"
@@ -1137,7 +1178,7 @@ class Register extends Component {
 							<div className="modal-content lanzador-modal-content">
 								<form>
 									<div className="modal-header lanzador-modal-header">
-										<h4 className="modal-title lanzador-modal-title">Evento : Nombre</h4>
+										<h4 className="modal-title lanzador-modal-title">Evento : {this.state.modalDetalle.eventoModal.nombre}</h4>
 										<button type="button" className="close" data-dismiss="modal" name="asociar"
 											aria-hidden="true" onClick={this.closeModalMap.bind(this)}>
 										&times;
@@ -1145,73 +1186,80 @@ class Register extends Component {
 									</div>
 									<div className="modal-body lanzador-modal-body">
 											<div className = "row">
-												<div className = "col-sm-3">
-													Descripción:
+												<div className = "col-sm-4">
+													Descripción: 
 												</div>
 												<div className ="col"> 
-													Charla dada por estemen para aprender sobre diseño
+													{this.state.modalDetalle.eventoModal.descripcion}
 												</div>
 											</div>
 
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Ubicación:
 												</div>
 												<div className ="col"> 
-													Cite Camp
+													{this.state.modalDetalle.eventoModal.nombreUbicacion}
 												</div>
 											</div>
 
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Fecha:
 												</div>
 												<div className ="col"> 
-													13/01/2019
+													{this.state.modalDetalle.eventoModal.fecha}
 												</div>
 											</div>
 
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Creador:
 												</div>
 												<div className ="col"> 
-													EsteMen
+													{this.state.modalDetalle.creador}
 												</div>
 											</div>
 
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Tipo:
 												</div>
 												<div className ="col"> 
-													Oficial
+													{this.state.modalDetalle.eventoModal.tipo? this.state.modalDetalle.eventoModal.tipo.replace("_"," "):"?" }
 												</div>
 											</div>
 
 											<hr></hr>
 
 											<div className = "row">
-												<div className = "col-sm-3">
+												<div className = "col-sm-4">
 													Categorias:
 												</div>
-												<div className ="col"> 
-													Charla
+												<div className ="col">
+												{	
+													this.state.modalDetalle.categoria.map((cat, i) => {
+														const len=this.state.modalDetalle.categoria.length-1;
+														return(
+															<span key={i}><small>{cat.nombre}{len === i?"":","}</small></span> 
+														);
+													})
+												}
 												</div>
 											</div>
 									</div>
 									<div className="modal-footer lanzador-modal-footer">
-										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cancel"
+										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cerrar"
 												onClick={this.closeModalMap.bind(this)} name="asociar" />
-										<input type="submit" className="btn btn-danger" value="asociar"
+										<input type="submit" className="btn btn-primary" value="Suscribir"
 												onClick={this.closeModalMap.bind(this)} />
 									</div>
 								</form>

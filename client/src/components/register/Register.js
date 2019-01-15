@@ -1023,7 +1023,7 @@ class Register extends Component {
     							<div className="card-header" id="headingThree">
       								<h5 className="mb-0">
         								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          									Registrados
+          									Subscripciones
         								</button>
       								</h5>
     							</div>
@@ -1038,8 +1038,8 @@ class Register extends Component {
 							<div className="card">
     							<div className="card-header" id="headingFour">
       								<h5 className="mb-0">
-        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-          									Registrados
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+          									Creados
         								</button>
       								</h5>
     							</div>
@@ -1050,6 +1050,67 @@ class Register extends Component {
       								</div>
     							</div>
   							</div>  
+
+							  <div className="card">
+    							<div className="card-header" id="headingFive">
+      								<h5 className="mb-0">
+        								<button className="perfil menu-op register-btn-options register-button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+          									Todos
+        								</button>
+      								</h5>
+    							</div>
+
+    							<div id="collapseFive" className="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+      								{
+      									this.state.eventos.map((event, i) => {
+      										return(
+			      								<div className="card-body" id="eventos" key={i}>
+													<div className="eventcard" key={i}>
+														<div className="eventcard-header">
+															<h5>Evento : {event.nombre}</h5>
+														</div>
+														<div className="eventcard-body">
+															<div className="row">
+																<div className="col-sm-5">
+																Creador:
+																</div>
+																<div className="col">
+																	{event.creador.nombre + " " + event.creador.apellido}
+																</div>
+															</div>
+															<hr></hr>
+															<div className="row">
+																<div className="col-sm-5">
+																Fecha:
+																</div>
+																<div className="col">
+																	{event.fecha}
+																</div>
+															</div>
+															<hr></hr>
+															<div className="row">
+																<div className="col-sm-5">
+																Tipo:
+																</div>
+																<div className="col">
+																{event.tipo.replace("_"," ")}
+																</div>
+															</div>
+															<div className="btn-evento-register">
+																<span className="popup-map-admin-launcher"
+																onClick={this.onDetalle.bind(this)}
+																id={event.id} name={"left"} >
+																	Ver mas
+																</span>
+															</div>
+														</div>
+													</div>
+			      								</div>
+      										);
+      									})
+      								}
+    							</div>
+  							</div>   
 
 						</div>
 						

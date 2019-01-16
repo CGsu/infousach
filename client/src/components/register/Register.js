@@ -1266,7 +1266,6 @@ class Register extends Component {
     							<div id="collapseThree" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
       								{
       									this.state.suscripciones.map((sub, i) => {
-      										console.log(sub.evento);
       										return(
 												<div className="card-body" id="eventos" key={i}>
 												<div className="eventcard" key={i}>

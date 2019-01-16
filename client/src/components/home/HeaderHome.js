@@ -7,7 +7,7 @@ class HeaderHome extends React.Component {
 				<div className="container">
 					<img className="image-responsive profile" src="img/logo_infousach.png" width="300" height="400" alt="" />
 					<h1 className="text-uppercase mb-0">Eventos de la universidad en tiempo real</h1>
-					<hr className="home-hr" />
+					<hr className="home-header-hr" />
 					<h2 className="font-weight-light mb-0">
 				Una aplicación desarrollada por el team ALPHA
 					</h2>

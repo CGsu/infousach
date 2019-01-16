@@ -14,10 +14,10 @@ class NavLogin extends React.Component {
 				<div className="collapse navbar-collapse" id="navbarText">
 					<ul className="navbar-nav ml-auto">
 						<li className="nav-item">
-	        				<Link to={"/"} className="nav-link"><span className="nav-text">Home</span></Link>
+	        				<Link to={"/"} className="nav-link"><span>Home</span></Link>
 	      				</li>
 	      				<li className="nav-item">
-	        				<Link to={"/free"} className="nav-link"><span className="nav-text">Ver Mapa</span></Link>
+	        				<Link to={"/free"} className="nav-link"><span>Ver Mapa</span></Link>
 	      				</li>
 					</ul>
 				</div>

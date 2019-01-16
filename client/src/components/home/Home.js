@@ -22,7 +22,6 @@ class Home extends Component {
 				<Route component={NavHome}/>
 				<Route component={HeaderHome}/>
 
-				<button id="myBtn" title="Go to top">Volver al inicio</button>
 				<div>
 					{/*Para ir al top */}
 			        <div className="container-fluid seccion1" id="features">
@@ -31,8 +30,8 @@ class Home extends Component {
 			              <h1 className="display-4 ubold">Características </h1>
 			              <p className="lead">InfoUsach es una plataforma, para crear tus eventos o buscar los eventos que te interesen</p>
 			            </div>
-			            <div className="col-md-6">
-			              <img src={frontis} className=" mask1" />
+			            <div className="col-md-6 div-img-header">
+			              <img src={frontis} className=" mask1 img-home " />
 			            </div>
 			          </div>
 			        </div>
@@ -40,7 +39,7 @@ class Home extends Component {
 			        <section id="about" className="pb-5">
 			        	<div className="profiles-container">
 				         	<div className="container">
-				         		<h5 className="section-title h1 display-1 text-center arial">Quienes somos</h5>
+				         		<h5 className="section-title h1 display-1 text-center arial whoiam">Quienes somos</h5>
 				         		<div className="row">
 					            	{/* Team member */}
 					            	<div className="col-xs-12 col-sm-6 col-md-4">
@@ -49,7 +48,7 @@ class Home extends Component {
 					            				<div className="frontside">
 					            					<div className="card home-card">
 					            						<div className="card-body text-center">
-					                          				<p><img className="rounded-circle img-fluid" src={profile1} alt="card image" /></p>
+					                          				<p><img className="rounded-circle img-fluid img-home " src={profile1} alt="card image" /></p>
 										                    <h4 className="card-title">Rodolfo Zúñiga</h4>
 										                    <p className="card-text">This is basic card with image on top, title, description and button.</p>
 										                    <span><small>correo@usach.cl</small></span>
@@ -66,7 +65,7 @@ class Home extends Component {
 					            				<div className="frontside">
 					            					<div className="card home-card">
 					            						<div className="card-body text-center">
-					                          				<p><img className="rounded-circle img-fluid" src={profile2} alt="card image" /></p>
+					                          				<p><img className="rounded-circle img-fluid img-home " src={profile2} alt="card image" /></p>
 	                          								<h4 className="card-title">Gonzalo Flores</h4>
 	                          								<p className="card-text">This is basic card with image on top, title, description and button.</p>
 	                          								<span><small>correo@usach.cl</small></span>
@@ -83,7 +82,7 @@ class Home extends Component {
 					            				<div className="frontside">
 					            					<div className="card home-card">
 					            						<div className="card-body text-center">
-					                          				<p><img className="rounded-circle img-fluid" src={profile3} alt="card image" /></p>
+					                          				<p><img className="rounded-circle img-fluid img-home " src={profile3} alt="card image" /></p>
 	                          								<h4 className="card-title">Ricardo Aedo</h4>
 	                          								<p className="card-text">Actualmente cursando 8° semestre en la carrera LCC en la USACH</p>
 	                          								<span><small>ricardo.aedo@usach.cl</small></span>
@@ -100,7 +99,7 @@ class Home extends Component {
 					            				<div className="frontside">
 					            					<div className="card home-card">
 					            						<div className="card-body text-center">
-					                          				<p><img className="rounded-circle img-fluid" src={profile4} alt="card image" /></p>
+					                          				<p><img className="rounded-circle img-fluid img-home " src={profile4} alt="card image" /></p>
 	                          								<h4 className="card-title">Elías Gárate</h4>
 	                          								<p className="card-text">This is basic card with image on top, title, description and button.</p>
 	                          								<span><small>correo@usach.cl</small></span>
@@ -117,7 +116,7 @@ class Home extends Component {
 					            				<div className="frontside">
 					            					<div className="card home-card">
 					            						<div className="card-body text-center">
-					                          				<p><img className="rounded-circle img-fluid" src={profile5} alt="card image" /></p>
+					                          				<p><img className="rounded-circle img-fluid img-home " src={profile5} alt="card image" /></p>
 	                          								<h4 className="card-title">Bryan Núñez</h4>
 	                          								<p className="card-text">This is basic card with image on top, title, description and button.</p>
 	                          								<span><small>correo@usach.cl</small></span>
@@ -134,7 +133,7 @@ class Home extends Component {
 					            				<div className="frontside">
 					            					<div className="card home-card">
 					            						<div className="card-body text-center">
-					                          				<p><img className="rounded-circle img-fluid" src={profile6} alt="card image" /></p>
+					                          				<p><img className="rounded-circle img-fluid img-home " src={profile6} alt="card image" /></p>
 	                          								<h4 className="card-title">Claudio Saji</h4>
 	                          								<p className="card-text">This is basic card with image on top, title, description and button.</p>
 	                          								<span><small>correo@usach.cl</small></span>
@@ -147,13 +146,13 @@ class Home extends Component {
 					            </div>
 				         	</div>
 			        	</div>
-			        	<div className="container-fluid seccion1" style={{backgroundColor: 'black'}} id="contact">
-			        		<h1 className="section-title h1 display-1 text-center arial">Contacto</h1>
-            				<div className="container-fluid cont1">  
+			        	<div className="container-fluid" style={{backgroundColor: 'black'}}>
+			        		<h1 className="display-1 text-center arial">Contacto</h1>
+            				<div className="cont1">  
             					<form id="contact"  method="post">
             						<h3>Ingresa la información para contactarnos.</h3>
             						<fieldset>
-                  						<input placeholder="Nombre" type="text" tabIndex={1} required autoFocus />
+                  						<input placeholder="Nombre" type="text" tabIndex={1} required/>
                 					</fieldset>
                 					<fieldset>
                   						<input placeholder="Correo" type="email" tabIndex={2} required />

@@ -1095,8 +1095,11 @@ const customStyles = {
 								  </button>
 								  <div className="collapse navbar-collapse">
 									  <ul className="nav navbar-nav ml-auto">
+									  	  <li className="nav-item">
+										  	<Link to={"/"} className="nav-link"><span>Home</span></Link>
+										  </li>
 										  <li className="nav-item">
-										  	<Link to={"/login"} className="nav-link"><span className="nav-text">Log In</span></Link>
+										  	<Link to={"/login"} className="nav-link"><span>Log In</span></Link>
 										  </li>
 									  </ul>
 								  </div>

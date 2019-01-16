@@ -1343,54 +1343,68 @@ class Register extends Component {
 
     							
       							<div className="card-body" id="eventos">
-      								{
-      									this.state.eventBarRight.map((event, i) => {
-											if (this.buscEventos(event)) {  
-												return(
-													<div className="eventcard" key={i}>
-														<div className="eventcard-header">
-															<h5>Evento : {event.nombre}</h5>
+									{this.state.eventBarRight.length === 0? 
+										<div className="alert alert-light">
+  											La Ubicación no tiene eventos
+										</div>
+									: this.state.eventBarRight.map((event, i) => {
+										var cont = 0;
+										if (this.buscEventos(event)) {
+											cont = 1;  
+											return(
+												<div className="eventcard" key={i}>
+													<div className="eventcard-header">
+														<h5>Evento : {event.nombre}</h5>
+													</div>
+													<div className="eventcard-body">
+														<div className="row">
+															<div className="col-sm-5">
+															Creador:
+															</div>
+															<div className="col">
+																{event.creador.nombre + " " + event.creador.apellido}
+															</div>
 														</div>
-														<div className="eventcard-body">
-															<div className="row">
-																<div className="col-sm-5">
-																Creador:
-																</div>
-																<div className="col">
-																	{event.creador.nombre + " " + event.creador.apellido}
-																</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Fecha:
 															</div>
-															<hr></hr>
-															<div className="row">
-																<div className="col-sm-5">
-																Fecha:
-																</div>
-																<div className="col">
-																	{event.fecha}
-																</div>
+															<div className="col">
+																{event.fecha}
 															</div>
-															<hr></hr>
-															<div className="row">
-																<div className="col-sm-5">
-																Tipo:
-																</div>
-																<div className="col">
-																{event.tipo.replace("_"," ")}
-																</div>
+														</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Tipo:
 															</div>
-															<div className="btn-evento-register">
-																<span className="popup-map-admin-launcher"
-																onClick={this.onDetalle.bind(this)}
-																id={event.id} name={"right"} >
-																	Ver mas
-																</span>
+															<div className="col">
+															{event.tipo.replace("_"," ")}
 															</div>
+														</div>
+														<div className="btn-evento-register">
+															<span className="popup-map-admin-launcher"
+															onClick={this.onDetalle.bind(this)}
+															id={event.id} name={"right"} >
+																Ver mas
+															</span>
 														</div>
 													</div>
-												);
-											}	
-      									})
-      								}
+												</div>
+											);
+										}
+										if(cont === 0){
+											return(
+												<div className="alert alert-light">
+													  No se encontraron Resultados
+												</div>
+											);
+										}	
+									  })
+
+									}
+      								
       							</div>
   							</div>
 						</div>

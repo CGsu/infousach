@@ -18,7 +18,7 @@ class Home extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="Home-Container">
 				<Route component={NavHome}/>
 				<Route component={HeaderHome}/>
 
@@ -29,7 +29,7 @@ class Home extends Component {
 			          <div className="row">
 			            <div className="col center-block m-5 md-6" id="platinum">
 			              <h1 className="display-4 ubold">Características </h1>
-			              <p className="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquam egestas commodo. Morbi quis semper quam, nec bibendum nibh. In hac habitasse platea dictumstdsfdsf. Mauris interdum mollis tincidunt. Suspendisse sagittis risus nibh, et tincidunt arcu sodales id. Nullam congue rhoncus eros, vel tristique nisi. Nullam fringilla tincidunt odio. Donec lacinia, ex nec iaculis molestie, mauris dolor molestie erat, eget egestas diam mi et ligula. .</p>
+			              <p className="lead">InfoUsach es una plataforma, para crear tus eventos o buscar los eventos que te interesen</p>
 			            </div>
 			            <div className="col-md-6">
 			              <img src={frontis} className=" mask1" />
@@ -85,8 +85,8 @@ class Home extends Component {
 					            						<div className="card-body text-center">
 					                          				<p><img className="rounded-circle img-fluid" src={profile3} alt="card image" /></p>
 	                          								<h4 className="card-title">Ricardo Aedo</h4>
-	                          								<p className="card-text">This is basic card with image on top, title, description and button.</p>
-	                          								<span><small>correo@usach.cl</small></span>
+	                          								<p className="card-text">Actualmente cursando 8° semestre en la carrera LCC en la USACH</p>
+	                          								<span><small>ricardo.aedo@usach.cl</small></span>
 					                        			</div>
 					            					</div>
 					            				</div>

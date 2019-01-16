@@ -27,7 +27,7 @@ class NavHome extends React.Component {
 	        				<a href="#contact" className="nav-link"><span className="nav-text">Contacto</span></a>
 	      				</li>
 	      				<li className="nav-item">
-	        				<a href="#" className="nav-link"><span className="nav-text">Ver Mapa</span></a>
+						  	<Link to={"/free"} className="nav-link"><span className="nav-text">Ver Mapa</span></Link>
 	      				</li>
 	      				<li className="nav-item">
 	        				<Link to={"/login"} className="nav-link"><span className="nav-text">Log In</span></Link>

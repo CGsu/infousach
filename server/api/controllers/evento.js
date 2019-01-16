@@ -208,7 +208,6 @@ exports.insert_new_event = (req, res, next) => {
 // Actualiza un evento del sistema
 exports.update_event = (req, res, next) => {
 	const id = req.params.id;
-	console.log(id);
 	const updateOps = {};
 	for ( const ops of req.body) {
 		updateOps[ops.propName] = ops.value;

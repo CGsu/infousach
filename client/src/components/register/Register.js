@@ -127,7 +127,8 @@ class RegisterMap extends Component {
 			},
       		modals: {
       			modalCrearEvent: false, 
-				modalAsociar: false
+				modalAsociar: false,
+				suscribir: true
       		},
       		filter: {
       			high: false,
@@ -343,38 +344,38 @@ class RegisterMap extends Component {
 
 	}
 
-	closeModalMap(e) {
-		const nameModal = e.target.getAttribute("name");
-		if (nameModal === "crear") {
-			this.setState({
-				modals: {
-					...this.state.modals,
-					modalCrearMap: false
-				}
-			});
-		} else if (nameModal === "update") {
-			this.setState({
-				modals: {
-					...this.state.modals
-				}
-			});
-		} else if (nameModal === "borrar") {
-			this.setState({
-				modals: {
-					...this.state.modals
-				}
-			});
-		}
+	// closeModalMap(e) {
+	// 	const nameModal = e.target.getAttribute("name");
+	// 	if (nameModal === "crear") {
+	// 		this.setState({
+	// 			modals: {
+	// 				...this.state.modals,
+	// 				modalCrearMap: false
+	// 			}
+	// 		});
+	// 	} else if (nameModal === "update") {
+	// 		this.setState({
+	// 			modals: {
+	// 				...this.state.modals
+	// 			}
+	// 		});
+	// 	} else if (nameModal === "borrar") {
+	// 		this.setState({
+	// 			modals: {
+	// 				...this.state.modals
+	// 			}
+	// 		});
+	// 	}
 
-		else if (nameModal === "asociar") {
-			this.setState({
-				modals: {
-					...this.state.modals,
-					modalAsociar: false
-				}
-			});
-		}
-	}
+	// 	else if (nameModal === "asociar") {
+	// 		this.setState({
+	// 			modals: {
+	// 				...this.state.modals,
+	// 				modalAsociar: false
+	// 			}
+	// 		});
+	// 	}
+	// }
 
 	onPopupClick(e) {
 		const idUbicacion = e.target.options.id;
@@ -799,6 +800,7 @@ class Register extends Component {
 			whichFilter: [],
 			eventos: [],
 			eventBarRight: [],
+			suscripciones: []
 		};
 		this.buscadorRight = this.buscadorRight.bind(this);
 		this.closeModalMap = this.closeModalMap.bind(this);
@@ -811,6 +813,9 @@ class Register extends Component {
 		this.managerFilter = this.managerFilter.bind(this);
 		this.controlFilter = this.controlFilter.bind(this);
 		this.buscEventos = this.buscEventos.bind(this);
+		this.suscribirse = this.suscribirse.bind(this);
+		this.desuscribirse = this.desuscribirse.bind(this);
+		this.cargaEventosSuscritos = this.cargaEventosSuscritos.bind(this);
 	}
 
 	componentWillMount() {
@@ -824,11 +829,24 @@ class Register extends Component {
 				evt_asociado: profile.evento_asociado
 			}
 		});
+		this.cargaEventosSuscritos(profile._id);
 	}
 
 	handleLogout() {
     	Auth.logout();
     	this.props.history.replace('/login');
+  	}
+
+  	cargaEventosSuscritos(id) {
+  		let url = Auth.domain + "/suscrito/" + id;
+  		Auth.fetch(url, {method: "GET"})
+  		.then(result => {
+  			console.log("Suscripciones: ", result.Suscripciones);
+  			this.setState({
+  				suscripciones: result.Suscripciones
+  			})
+  		})
+  		.catch(err => console.log(err));
   	}
 
   	cargaCategorias(data) {
@@ -903,10 +921,16 @@ class Register extends Component {
 				}
 			});
 		}
+		const idEvento = e.target.id;
+		let s = true;
+		if(this.state.suscripciones.find(x => x.evento._id === idEvento)) {
+			s = !s;
+		}
 		this.setState({
 			modals: {
 				modalAsociar: true,
-				event_id: e.target.id
+				event_id: idEvento,
+				suscrito: s
 			}
 		});
 	}
@@ -1065,6 +1089,71 @@ class Register extends Component {
 		});
 	}
 
+	suscribirse(e) {
+		e.preventDefault();
+		console.log("suscribir objeto: ", this.state.suscripciones);
+		const idEvento = e.target.id;
+		const user = this.state.usuario.id;
+		const url = Auth.domain + "/suscrito";
+		const body = {
+			user: user,
+			evento: idEvento
+		};
+		const options = {
+			method: "POST",
+			body: JSON.stringify(body)
+		};
+		Auth.fetch(url, options)
+		.then(result => {
+			let url2 = Auth.domain + "/suscrito/by/" + result.id;
+			Auth.fetch(url2, {method: "GET"})
+			.then(result => {
+				let temp = this.state.suscripciones;
+				const data = result.Suscripciones;
+				console.log("informacion", data);
+				if (temp.indexOf(data[0]) === -1) {
+					temp.push(data[0]);
+					this.setState({
+						suscrito: temp
+					}, () => {
+						this.setState({
+							modals: {
+								...this.state.modals,
+								suscrito: !this.state.modals.suscrito
+							}
+						});
+					});
+				}
+			})
+			.catch(err => console.log(err));
+		})
+		.catch(err => console.log(err));
+	}
+
+	desuscribirse(e) {
+		e.preventDefault();
+		const idEvento = e.target.id;
+		let idSuscripcion = this.state.suscripciones.find(x => x.evento._id === idEvento).id;
+		const url = Auth.domain + "/suscrito/" + idSuscripcion;
+		Auth.fetch(url, {method: "DELETE"})
+		.then(result => {
+			let temp = this.state.suscripciones;
+			const indiceEliminar = temp.findIndex(x => x.evento._id === idEvento);
+			temp.splice(indiceEliminar, 1);
+			this.setState({
+					suscrito: temp
+				}, () => {
+				this.setState({
+					modals: {
+						...this.state.modals,
+						suscrito: !this.state.modals.suscrito
+					}
+				});
+			});
+		})
+		.catch(err => console.log(err));
+	}
+
 	render() {
 		return (
 			<div className="register-body">
@@ -1176,7 +1265,56 @@ class Register extends Component {
     							</div>
 
     							<div id="collapseThree" className="collapse card headingTwo" aria-labelledby="headingTwo" data-parent="#accordion">
-      								registrados
+      								{
+      									this.state.suscripciones.map((sub, i) => {
+      										console.log(sub.evento);
+      										return(
+												<div className="card-body" id="eventos" key={i}>
+												<div className="eventcard" key={i}>
+													<div className="eventcard-header">
+														<h5>Evento : {sub.evento.nombre}</h5>
+													</div>
+													<div className="eventcard-body">
+														<div className="row">
+															<div className="col-sm-5">
+															Creador:
+															</div>
+															<div className="col">
+																{sub.evento.creador.nombre + " " + sub.evento.creador.apellido}
+															</div>
+														</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Fecha:
+															</div>
+															<div className="col">
+																{sub.evento.fecha}
+															</div>
+														</div>
+														<hr></hr>
+														<div className="row">
+															<div className="col-sm-5">
+															Tipo:
+															</div>
+															<div className="col">
+															{sub.evento.tipo.replace("_"," ")}
+															</div>
+														</div>
+														<div className="btn-evento-register">
+															<span className="popup-map-admin-launcher"
+															onClick={this.onDetalle.bind(this)}
+															id={sub.evento.id} name={"left"} >
+																Ver mas
+															</span>
+														</div>
+													</div>
+												</div>
+												<hr></hr>
+											</div>
+      										);
+      									})
+      								}
     							</div>
   							</div>
 
@@ -1348,7 +1486,7 @@ class Register extends Component {
   											La Ubicación no tiene eventos
 										</div>
 									: this.state.eventBarRight.map((event, i) => {
-										var cont = 0;
+										if(i===0) { var cont = 0; }
 										if (this.buscEventos(event)) {
 											cont = 1;  
 											return(
@@ -1396,7 +1534,7 @@ class Register extends Component {
 										}
 										if(cont === 0){
 											return(
-												<div className="alert alert-light">
+												<div className="alert alert-light" key={i+1}>
 													  No se encontraron Resultados
 												</div>
 											);
@@ -1533,8 +1671,19 @@ class Register extends Component {
 									<div className="modal-footer lanzador-modal-footer">
 										<input type="button" className="btn btn-default" data-dismiss="modal" value="Cerrar"
 												onClick={this.closeModalMap.bind(this)} name="asociar" />
-										<input type="submit" className="btn btn-primary" value="Suscribir"
-												onClick={this.closeModalMap.bind(this)} />
+										
+										{
+											this.state.modals.suscrito ? 
+											(
+												<input type="submit" className="btn btn-primary" value="Suscribir"
+													onClick={this.suscribirse.bind(this)} id={this.state.modalDetalle.eventoModal.id}/>
+											) :
+											(
+												<input type="submit" className="btn btn-danger" value="Desuscribir"
+													onClick={this.desuscribirse.bind(this)} id={this.state.modalDetalle.eventoModal.id}/>
+											)
+										}
+
 									</div>
 								</form>
 							</div>

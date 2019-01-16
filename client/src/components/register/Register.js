@@ -841,7 +841,6 @@ class Register extends Component {
   		let url = Auth.domain + "/suscrito/" + id;
   		Auth.fetch(url, {method: "GET"})
   		.then(result => {
-  			console.log("Suscripciones: ", result.Suscripciones);
   			this.setState({
   				suscripciones: result.Suscripciones
   			})
